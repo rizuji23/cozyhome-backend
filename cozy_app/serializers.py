@@ -41,5 +41,36 @@ class StokInSerializer(serializers.ModelSerializer):
         model = Stok_In
         fields = ('id_stok_in', 'id_stok_gudang', 'nama_material', 'kategori_material', 'stok_in', 'katerangan', 'username', 'created_at', 'updated_at')
 
+class CustomerSerializer(serializers.ModelSerializer):
+    class Meta(object):
+        model = Customer
+        fields = ('id_customer', 'nama_customer', 'no_telp', 'email', 'alamat', 'nama_perusahaan', 'created_at', 'updated_at')
+
+
+class ProjectSerializer(serializers.ModelSerializer):
+    nama_customer = serializers.CharField(source="id_customer.nama_customer", read_only=True)
+
+    class Meta(object):
+        model = Project
+        fields = ('id_project', 'nama_project', 'nama_customer', 'jumlah_volumn', 'estimasi_pengerjaan', 'kategori_project', 'total_cost', 'created_at', 'updated_at')
+
+
+class CostProjectSerializer(serializers.ModelSerializer):
+    nama_project = serializers.CharField(source="id_project.nama_project", read_only=True)
+
+    class Meta(object):
+        model = Cost_Project
+        fields = ('id_cost_project', 'nama_project', 'cost_design', 'cost_oprasional', 'cost_produksi', 'cost_bahan', 'id_user', 'created_at', 'updated_at')
+
+class ProgressProjectSerializer(serializers.ModelSerializer):
+    nama_project = serializers.CharField(source="id_project.nama_project", read_only=True)
+
+    class Meta(object):
+        model = Progress_Project
+        fields = ('id_progres_project', 'nama_project', 'nama_progress', 'desc', 'percentage', 'status', 'id_user', 'created_at', 'updated_at')
+
+
+
+
 
 

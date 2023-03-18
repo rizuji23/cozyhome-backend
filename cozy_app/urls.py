@@ -1,7 +1,7 @@
 from django.urls import re_path as urls
 
 from . import views
-from .stok import MaterialView, KategoriMaterialView, StokAllView, StokInView
+from .stok import *
 from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
@@ -12,6 +12,14 @@ urlpatterns = [
 
     urls("stok/", StokAllView.as_view(), name="get_stok_all"),
     urls("stok_in/", StokInView.as_view(), name="stok_in"),
+
+    urls("customer/", CustomerView.as_view(), name="get_customer"),
+
+    urls("project/", ProjectView.as_view(), name="get_project"),
+
+    urls("cost_project/", CostProjectView.as_view(), name="get_cost_project"),
+
+    urls("progress_project/", ProgressProjectView.as_view(), name="get_progress_project"),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

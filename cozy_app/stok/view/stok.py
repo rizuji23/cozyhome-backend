@@ -80,8 +80,18 @@ class StokInView(APIView):
 class StokOutView(APIView):
     permission_classes = (IsAuthenticated, )
 
-    
-            
+    def post(self, request):
+        id_stok_in = getuuid.Ramdom_Id.get_id()
+        id_stok_gudang = request.data['id_stok_gudang']
+        id_material = request.data['id_material']
+        id_project = request.data['id_project']
+        stok_out = request.data['stok_out']
+        keterangan = request.data['keterangan']
+        id_user = request.data['id_user']
+
+        
+        
+
 
     
 
