@@ -22,7 +22,7 @@ class ProgressProjectView(APIView):
             return response(code=200, data=self.data, detail_message=None)
 
         except Progress_Project.DoesNotExist:
-            return response(code=404, data=None, detail_message="data not found")
+            return response(code=404, data=None, detail_message="data progress not found")
         
     def post(self, request):
         id_progress_project = getuuid.Ramdom_Id.get_id()
@@ -47,7 +47,7 @@ class ProgressProjectView(APIView):
                 return response(code=500, data=None, detail_message=str(e))
         
         except Project.DoesNotExist:
-            return response(code=404, data=None, detail_message="data not found")
+            return response(code=404, data=None, detail_message="data project not found")
         
     def put(self, request):
         id = request.query_params.get('id')
@@ -78,9 +78,9 @@ class ProgressProjectView(APIView):
                 except Exception as e:
                     return response(code=500, data=None, detail_message=str(e))
             except Progress_Project.DoesNotExist:
-                return response(code=404, data=None, detail_message="data not found")
+                return response(code=404, data=None, detail_message="data progress not found")
         except Project.DoesNotExist:
-            return response(code=404, data=None, detail_message="data not found")
+            return response(code=404, data=None, detail_message="data project not found")
     
     def delete(self, request):
         id = request.query_params.get('id')
@@ -94,6 +94,6 @@ class ProgressProjectView(APIView):
                 return response(code=201, data=None, detail_message="delete request success")
 
             except Progress_Project.DoesNotExist:
-                return response(code=404, data=None, detail_message="data not found")
+                return response(code=404, data=None, detail_message="data progress not found")
         except Exception as e:
             return response(code=500, data=None, detail_message=str(e))

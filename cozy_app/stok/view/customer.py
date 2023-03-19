@@ -61,7 +61,7 @@ class CustomerView(APIView):
                 return response(code=201, data=None, detail_message="update request success")
 
             except Customer.DoesNotExist:
-                 return response(code=404, data=None, detail_message="data not found")
+                 return response(code=404, data=None, detail_message="data customer not found")
         except Exception as e:
             return response(code=500, data=None, detail_message=str(e))
         
@@ -78,7 +78,7 @@ class CustomerView(APIView):
                 return response(code=201, data=None, detail_message="delete request success")
 
             except Customer.DoesNotExist:
-                return response(code=404, data=None, detail_message="data not found")
+                return response(code=404, data=None, detail_message="data customer not found")
         
         except Exception as e:
             return response(code=500, data=None, detail_message=str(e))

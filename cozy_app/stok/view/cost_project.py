@@ -21,7 +21,7 @@ class CostProjectView(APIView):
 
             return response(code=200, data=self.data, detail_message=None)
         except Cost_Project.DoesNotExist:
-            return response(code=404, data=None, detail_message="data not found")
+            return response(code=404, data=None, detail_message="data cost project not found")
     
     def post(self, request):
         id_cost_project = getuuid.Ramdom_Id.get_id()
@@ -45,7 +45,7 @@ class CostProjectView(APIView):
                 return response(code=500, data=None, detail_message=str(e))
             
         except Project.DoesNotExist:
-            return response(code=404, data=None, detail_message="data not found")
+            return response(code=404, data=None, detail_message="data project not found")
     
     def put(self, request):
         id = request.query_params.get('id')
@@ -74,9 +74,9 @@ class CostProjectView(APIView):
                     return response(code=201, data=None, detail_message="update request success")
             
                 except Cost_Project.DoesNotExist:
-                    return response(code=404, data=None, detail_message="data not found")
+                    return response(code=404, data=None, detail_message="data cost project not found")
             except Project.DoesNotExist:
-                return response(code=404, data=None, detail_message="data not found")
+                return response(code=404, data=None, detail_message="data project not found")
         except Exception as e:
             return response(code=500, data=None, detail_message=str(e))
     
@@ -90,6 +90,6 @@ class CostProjectView(APIView):
                 data.delete()
                 return response(code=201, data=None, detail_message="delete request success")
             except Cost_Project.DoesNotExist:
-                return response(code=404, data=None, detail_message="data not found")
+                return response(code=404, data=None, detail_message="data cost project not found")
         except Exception as e:
             return response(code=500, data=None, detail_message=str(e))

@@ -44,7 +44,7 @@ class KategoriMaterialView(APIView):
                 return response(code=201, data=None, detail_message="update request success")
             
             except Kategori_Material.DoesNotExist:
-                return response(code=404, data=None, detail_message="data not found")
+                return response(code=404, data=None, detail_message="data kategori material not found")
         except Exception as e:
             return response(code=500, data=None, detail_message=str(e))
 
@@ -58,7 +58,7 @@ class KategoriMaterialView(APIView):
 
                 return response(code=201, data=None, detail_message="delete request success")
             except Kategori_Material.DoesNotExist:
-                return response(code=404, data=None, detail_message="data not found")
+                return response(code=404, data=None, detail_message="data kategori material not found")
 
         except Exception as e:
             return response(code=500, data=None, detail_message=str(e))

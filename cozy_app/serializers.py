@@ -41,6 +41,19 @@ class StokInSerializer(serializers.ModelSerializer):
         model = Stok_In
         fields = ('id_stok_in', 'id_stok_gudang', 'nama_material', 'kategori_material', 'stok_in', 'katerangan', 'username', 'created_at', 'updated_at')
 
+class StokOutSerializer(serializers.ModelSerializer):
+    nama_material = serializers.CharField(source="id_material.nama_material", read_only=True)
+    kategori_material = serializers.CharField(source="id_material.id_kategori_material.nama_kategori", read_only=True)
+    username = serializers.CharField(source="id_user.username", read_only=True)
+
+    nama_project = serializers.CharField(source="id_project.id_project.nama_project", read_only=True)
+
+    id_stok_gudang = serializers.CharField(source="id_stok_gudang.id_stok_gudang", read_only=True)
+
+    class Meta(object):
+        model = Stok_Out
+        fields = ('id_stok_out', 'id_stok_gudang', 'nama_project', 'nama_material', 'kategori_material', 'stok_out', 'katerangan', 'username', 'created_at', 'updated_at')
+
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = Customer

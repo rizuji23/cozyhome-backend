@@ -13,6 +13,8 @@ urlpatterns = [
     urls("stok/", StokAllView.as_view(), name="get_stok_all"),
     urls("stok_in/", StokInView.as_view(), name="stok_in"),
 
+    urls("stok_out/", StokOutView.as_view(), name="get_stok_out"),
+
     urls("customer/", CustomerView.as_view(), name="get_customer"),
 
     urls("project/", ProjectView.as_view(), name="get_project"),

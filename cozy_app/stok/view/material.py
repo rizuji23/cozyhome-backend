@@ -47,7 +47,7 @@ class MaterialView(APIView):
                 return response(code=201, data=None, detail_message="update request success")
 
             except Material.DoesNotExist:
-                return response(code=404, data=None, detail_message="data not found")
+                return response(code=404, data=None, detail_message="data material not found")
         except Exception as e:
             return response(code=500, data=None, detail_message=str(e))
         
@@ -62,7 +62,7 @@ class MaterialView(APIView):
                 return response(code=201, data=None, detail_message="delete request success")
             
             except Material.DoesNotExist:
-                return response(code=404, data=None, detail_message="data not found")
+                return response(code=404, data=None, detail_message="data material not found")
         
         except Exception as e:
             return response(code=500, data=None, detail_message=str(e))
