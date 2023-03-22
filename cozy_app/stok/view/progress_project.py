@@ -13,7 +13,9 @@ class ProgressProjectView(APIView):
     def get(self, request):
         id = request.query_params.get('id')
         try:
-            progress = ProgressProjectSerializer(Progress_Project.objects.filter(id_project=id), many=True)
+            project = Project.objects.get(id_project=id)
+
+            progress = ProgressProjectSerializer(Progress_Project.objects.filter(id_project_id=project.id), many=True)
 
             self.data = {
                 "progress_project": progress.data
@@ -21,7 +23,7 @@ class ProgressProjectView(APIView):
 
             return response(code=200, data=self.data, detail_message=None)
 
-        except Progress_Project.DoesNotExist:
+        except Project.DoesNotExist:
             return response(code=404, data=None, detail_message="data progress not found")
         
     def post(self, request):

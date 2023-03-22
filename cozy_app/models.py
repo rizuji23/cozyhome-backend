@@ -38,8 +38,11 @@ class Project(models.Model):
     nama_project = models.CharField(max_length=100)
     jumlah_volumn = models.CharField(max_length=100)
     estimasi_pengerjaan = models.CharField(max_length=100)
+    start_date = models.DateField(null=True)
+    end_date = models.DateField(null=True)
     kategori_project = models.CharField(max_length=50)
     total_cost = models.BigIntegerField()
+    status = models.CharField(max_length=100, null=True)
     id_user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -55,12 +58,13 @@ class Cost_Project(models.Model):
     cost_operasional = models.BigIntegerField(null=True)
     cost_produksi = models.BigIntegerField(null=True)
     cost_bahan = models.BigIntegerField(null=True)
+    cost_lain = models.BigIntegerField(null=True)
     id_user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.id_project
+        return self.id_project.nama_project
 
 class Progress_Project(models.Model):
     id = models.AutoField(primary_key=True)
@@ -153,3 +157,16 @@ class Modified_Stok(models.Model):
 
     def __str__(self):
        return self.id_modified_stok
+    
+class Pekerjaan_Lain(models.Model):
+    id = models.AutoField(primary_key=True)
+    id_pekerjaan_lain = models.CharField(max_length=100)
+    id_project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    nama_pekerjaan = models.CharField(max_length=100)
+    desc = models.TextField()
+    id_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+       return self.nama_pekerjaan

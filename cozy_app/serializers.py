@@ -65,7 +65,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     class Meta(object):
         model = Project
-        fields = ('id_project', 'nama_project', 'nama_customer', 'jumlah_volumn', 'estimasi_pengerjaan', 'kategori_project', 'total_cost', 'created_at', 'updated_at')
+        fields = ('id_project', 'nama_project', 'nama_customer', 'jumlah_volumn', 'estimasi_pengerjaan', 'kategori_project', 'total_cost', 'status', 'created_at', 'updated_at')
 
 
 class CostProjectSerializer(serializers.ModelSerializer):
@@ -73,7 +73,7 @@ class CostProjectSerializer(serializers.ModelSerializer):
 
     class Meta(object):
         model = Cost_Project
-        fields = ('id_cost_project', 'nama_project', 'cost_design', 'cost_oprasional', 'cost_produksi', 'cost_bahan', 'id_user', 'created_at', 'updated_at')
+        fields = ('id_cost_project', 'nama_project', 'cost_design', 'cost_operasional', 'cost_produksi', 'cost_bahan', 'cost_lain', 'id_user', 'created_at', 'updated_at')
 
 class ProgressProjectSerializer(serializers.ModelSerializer):
     nama_project = serializers.CharField(source="id_project.nama_project", read_only=True)
@@ -83,7 +83,10 @@ class ProgressProjectSerializer(serializers.ModelSerializer):
         fields = ('id_progres_project', 'nama_project', 'nama_progress', 'desc', 'percentage', 'status', 'id_user', 'created_at', 'updated_at')
 
 
+class PekerjaanLainSerializer(serializers.ModelSerializer):
+    nama_project = serializers.CharField(source="id_project.nama_project", read_only=True)
 
-
-
-
+    class Meta(object):
+        model = Pekerjaan_Lain
+        fields = ('id_pekerjaan_lain', 'nama_project', 'nama_pekerjaan', 'desc', 'id_user', 'created_at', 'updated_at')
+        

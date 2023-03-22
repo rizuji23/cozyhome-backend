@@ -20,7 +20,7 @@ class StokAllView(APIView):
 
 
 class StokInView(APIView):
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, ) 
 
     def get(self, request):
         get_now = datetime.date.today()

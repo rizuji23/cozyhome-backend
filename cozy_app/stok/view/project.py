@@ -12,13 +12,41 @@ class ProjectView(APIView):
     permission_classes = (IsAuthenticated, )
 
     def get(self, request):
-        project = ProjectSerializer(Project.objects.all().select_related('id_customer'), many=True)
+        if 'id_customer' in request.query_params:
+            id_customer = request.query_params.get('id_customer')
+            try:
+                customer = Customer.objects.get(id_customer=id_customer)
+                project = ProjectSerializer(Project.objects.filter(id_customer_id=customer.id).
+                select_related('id_customer'), many=True)
+                self.data = {
+                    "project": project.data
+                }
 
-        self.data = {
-            "project": project.data
-        }
+                return response(code=200, data=self.data, detail_message=None)
+            except Customer.DoesNotExist:
+                return response(code=404, data=None, detail_message="data customer not found")
+            
+        elif 'id_project' in request.query_params:
+            id_project = request.query_params.get('id_project')
+            try:
+                project = ProjectSerializer(Project.objects.select_related('id_customer').get(id_project=id_project), many=False)
+                self.data = {
+                    "project": project.data
+                }
 
-        return response(code=200, data=self.data, detail_message=None)
+                return response(code=200, data=self.data, detail_message=None)
+            except Project.DoesNotExist:
+                return response(code=404, data=None, detail_message="data projek not found")
+        
+        else:
+            project = ProjectSerializer(Project.objects.all().select_related('id_customer'), many=True)
+            self.data = {
+                "project": project.data
+            }
+
+            return response(code=200, data=self.data, detail_message=None)
+
+        
     
     def post(self, request):
         id_project = getuuid.Ramdom_Id.get_id()
@@ -34,9 +62,15 @@ class ProjectView(APIView):
             try:
                 customer = Customer.objects.get(id_customer=id_customer)
 
-                _customer = Project(id_project=id_project, id_customer_id=customer.id, nama_project=nama_project, jumlah_volumn=jumlah_volumn, estimasi_pengerjaan=estimasi_pengerjaan, kategori_project=kategori_project, total_cost=total_cost, id_user_id=id_user)
+                project = Project(id_project=id_project, id_customer_id=customer.id, nama_project=nama_project, jumlah_volumn=jumlah_volumn, estimasi_pengerjaan=estimasi_pengerjaan, kategori_project=kategori_project, total_cost=total_cost, id_user_id=id_user)
+                id_cost_project = getuuid.Ramdom_Id.get_id()
 
-                _customer.save()
+                project.save()
+
+                get_pro = Project.objects.get(id_project=id_project)
+
+                cost = Cost_Project(id_cost_project=id_cost_project, id_project_id=get_pro.id, cost_design=0, cost_operasional=0, cost_produksi=0, cost_bahan=0, id_user_id=id_user)
+                cost.save()
                 return response(code=201, data=None, detail_message="created request success")
 
             except Customer.DoesNotExist:
