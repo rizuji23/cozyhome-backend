@@ -47,12 +47,62 @@ class CostProduksiView(APIView):
 
     def put(self, request):
         id = request.query_params.get('id')
-        cost_produksi = request.data['cost_produksi']
+        cost_produksi = request.data['cost']
         try:
             cost_all = Cost_Project.objects.get(id_cost_project=id)
             cost_all.cost_produksi = cost_produksi
             cost_all.save()
+
+            cost_sum = cost_all.cost_produksi + cost_all.cost_bahan + cost_all.cost_design + cost_all.cost_operasional + cost_all.cost_lain
+
+            _project = Project.objects.get(id=cost_all.id_project_id)
+            _project.total_cost = cost_sum
+            _project.save()
+
+            return response(code=201, data=None, detail_message="update request success")
+        except Cost_Project.DoesNotExist:
+            return response(code=404, data=None, detail_message="data cost project not found")
+        
+class CostDesignView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def put(self, request):
+        id = request.query_params.get('id')
+        cost_design = request.data['cost']
+
+        try:
+            cost_all = Cost_Project.objects.get(id_cost_project=id)
+            cost_all.cost_design = cost_design
+            cost_all.save()
+
+            cost_sum = cost_all.cost_produksi + cost_all.cost_bahan + cost_all.cost_design + cost_all.cost_operasional + cost_all.cost_lain
+
+            _project = Project.objects.get(id=cost_all.id_project_id)
+            _project.total_cost = cost_sum
+            _project.save()
+
             return response(code=201, data=None, detail_message="update request success")
         except Cost_Project.DoesNotExist:
             return response(code=404, data=None, detail_message="data cost project not found")
 
+class CostOperasionalView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def put(self, request):
+        id = request.query_params.get('id')
+        cost_operasional = request.data['cost']
+
+        try:
+            cost_all = Cost_Project.objects.get(id_cost_project=id)
+            cost_all.cost_operasional = cost_operasional
+            cost_all.save()
+
+            cost_sum = cost_all.cost_produksi + cost_all.cost_bahan + cost_all.cost_design + cost_all.cost_operasional + cost_all.cost_lain
+
+            _project = Project.objects.get(id=cost_all.id_project_id)
+            _project.total_cost = cost_sum
+            _project.save()
+
+            return response(code=201, data=None, detail_message="update request success")
+        except Cost_Project.DoesNotExist:
+            return response(code=404, data=None, detail_message="data cost project not found")

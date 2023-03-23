@@ -6,3 +6,4 @@ from .view.project import *
 from .view.cost_project import *
 from .view.progress_project import *
 from .view.user import *
+from .view.pekerjaan_lain import *

@@ -82,3 +82,27 @@ class CustomerView(APIView):
         
         except Exception as e:
             return response(code=500, data=None, detail_message=str(e))
+        
+
+class CustomerDetailView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request):
+        id = request.query_params.get('id_customer')
+
+        try:
+            customer = Customer.objects.get(id_customer=id)
+            project = Project.objects.filter(id_customer_id=customer.id).select_related('id_customer')
+
+            _customer = CustomerSerializer(customer, many=False)
+            _project = ProjectSerializer(project, many=True)
+
+            self.data = {
+                "project": _project.data,
+                "customer": _customer.data
+            }
+
+            
+            return response(code=200, data=self.data, detail_message=None)
+        except Customer.DoesNotExist:
+            return response(code=404, data=None, detail_message="data customer not found")

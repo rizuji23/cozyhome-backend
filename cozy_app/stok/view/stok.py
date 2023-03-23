@@ -132,6 +132,16 @@ class StokOutView(APIView):
                         _stok_out = Stok_Out(id_stok_out=id_stok_out, id_stok_gudang_id=stok_gudang.id, id_material_id=material.id, id_project_id=project.id, stok_out=stok_out, katerangan=keterangan, id_user_id=id_user)
 
                         _stok_out.save()
+                        total_bahan = int(material.harga) * int(stok_out)
+                        cost_all = Cost_Project.objects.get(id_project_id=project.id)
+                        total_all = int(total_bahan) + int(cost_all.cost_bahan)
+                        cost_all.cost_bahan = total_all
+                        cost_all.save()
+
+                        cost_sum = cost_all.cost_produksi + cost_all.cost_bahan + cost_all.cost_design + cost_all.cost_operasional + cost_all.cost_lain
+
+                        project.total_cost = cost_sum
+                        project.save()
 
                         return response(code=201, data=None, detail_message="created request success")
 

@@ -28,7 +28,7 @@ class ProgressProjectView(APIView):
         
     def post(self, request):
         id_progress_project = getuuid.Ramdom_Id.get_id()
-        id_project = request.data['id_project']
+        id_project = request.query_params.get('id')
         nama_progress = request.data['nama_progress']
         desc = request.data['desc']
         percentage = request.data['percentage']
@@ -42,6 +42,9 @@ class ProgressProjectView(APIView):
                 _progress = Progress_Project(id_progress_project=id_progress_project, id_project_id=project.id, nama_progress=nama_progress, desc=desc, percentage=percentage, status=status, id_user_id=id_user)
                 
                 _progress.save()
+
+                project.status = status
+                project.save()
 
                 return response(code=201, data=None, detail_message="created request success")
 

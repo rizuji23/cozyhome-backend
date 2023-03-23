@@ -25,7 +25,15 @@ urlpatterns = [
 
     urls("cost/", CostProjectView.as_view(), name="get_cost_project"),
 
-    urls("progress_project/", ProgressProjectView.as_view(), name="get_progress_project"),
+    urls("progress/", ProgressProjectView.as_view(), name="get_progress_project"),
+
+    urls("customer_detail/", CustomerDetailView.as_view(), name="get_detail_customer"),
+
+    urls("cost_produksi/", CostProduksiView.as_view(), name="cost_produksi"),
+    urls("cost_design/", CostDesignView.as_view(), name="cost_design"),
+    urls("cost_operasional/", CostOperasionalView.as_view(), name="cost_operasional"),
+
+    urls("pekerjaan_lain/", PekerjaanLainView.as_view(), name="pekerjaan_lain"),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

@@ -10,12 +10,20 @@ class MaterialView(APIView):
     permission_classes = (IsAuthenticated, )
 
     def get(self, request):
-        materials = Material.objects.all().select_related('id_kategori_material')
-        seriliazer = MaterialSerializer(materials, many=True)
-        self.data = {
-            "material": seriliazer.data
-        }
-        return response(code=200, data=self.data, detail_message=None)
+        if 'id_material' in request.query_params:
+            materials = Material.objects.select_related('id_kategori_material').get(id_material=request.query_params.get('id_material'))
+            serializer = MaterialSerializer(materials, many=False)
+            self.data = {
+                "material": serializer.data,
+            }
+            return response(code=200, data=self.data, detail_message=None) 
+        else:
+            materials = Material.objects.all().select_related('id_kategori_material')
+            seriliazer = MaterialSerializer(materials, many=True)
+            self.data = {
+                "material": seriliazer.data
+            }
+            return response(code=200, data=self.data, detail_message=None)
     
     def post(self, request):
         id_material = getuuid.Ramdom_Id.get_id()
