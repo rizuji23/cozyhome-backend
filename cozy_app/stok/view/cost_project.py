@@ -6,6 +6,9 @@ from rest_framework.views import APIView
 from ...etc import getuuid
 from ...etc.response_get import response
 import datetime
+import pandas as pd
+from django.db.models import Sum
+ 
 
 class CostProjectView(APIView):
     permission_classes = (IsAuthenticated, )
@@ -106,3 +109,23 @@ class CostOperasionalView(APIView):
             return response(code=201, data=None, detail_message="update request success")
         except Cost_Project.DoesNotExist:
             return response(code=404, data=None, detail_message="data cost project not found")
+        
+class CostProjectSumView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request):
+        cost = Cost_Project.objects.aggregate(total_bahan=Sum('cost_bahan'), total_design=Sum('cost_design'), total_operasional=Sum('cost_operasional'), total_produksi=Sum('cost_produksi'), total_lain=Sum('cost_lain'))
+
+        total_all = 0
+        for k, v in cost.items():
+            print(v)
+            total_all += v
+
+        cost['total_all'] = total_all
+
+        self.data = {
+            "sum": cost,
+        }
+
+        return response(code=200, data=self.data, detail_message=None)
+        

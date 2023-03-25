@@ -8,6 +8,8 @@ from rest_framework_simplejwt.views import TokenBlacklistView
 urlpatterns = [
     urls('login/', views.CustomTokenPairView.as_view(), name="token_obtain_pair"),
     urls('logout/', TokenBlacklistView.as_view(), name="logout"),
+    urls('change_password/', ChangePasswordView.as_view(), name="change_password"),
+
     urls("kategori_material/", KategoriMaterialView.as_view(), name="get_kategori_material"),
     urls("kategori_material/", KategoriMaterialView.as_view(), name="get_kategori_material"),
     urls("material/", MaterialView.as_view(), name="get_material"),
@@ -27,6 +29,7 @@ urlpatterns = [
     urls("project_count/", ProjectCountView.as_view(), name="get_count_project"),
     urls("project_print/", ProjectPrintView.as_view(), name="get_count_project"),
     urls("cost/", CostProjectView.as_view(), name="get_cost_project"),
+    urls('cost_sum/', CostProjectSumView.as_view(), name="get_cost_sum"),
 
     urls("progress/", ProgressProjectView.as_view(), name="get_progress_project"),
     urls("progress_detail/", ProgressDetailView.as_view(), name="get_progress_detail"),

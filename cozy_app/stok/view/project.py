@@ -60,7 +60,7 @@ class ProjectView(APIView):
         estimasi_pengerjaan = request.data['estimasi_pengerjaan']
         kategori_project = request.data['kategori_project']
         start_date = request.data['start_date']
-        end_date = request.data['start_date']
+        end_date = request.data['end_date']
         status = request.data['status']
         total_cost = request.data['total_cost']
         desc = request.data['desc']

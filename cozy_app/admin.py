@@ -22,18 +22,46 @@ class CustomUser(UserAdmin):
                 },
             ),
         )
-        
+
+class CustomerCustom(admin.ModelAdmin):
+    list_display = ('nama_customer', 'no_telp', 'email', 'alamat', 'nama_perusahaan')
+
+class ProjectCustom(admin.ModelAdmin):
+    list_display = ('nama_project', 'id_customer', 'jumlah_volumn', 'kategori_project', 'total_cost')
+
+class CostProjectCustom(admin.ModelAdmin):
+    list_display = ('id_project', 'cost_design', 'cost_operasional', 'cost_produksi', 'cost_bahan', 'cost_lain')
+
+class ProgressProjectCustom(admin.ModelAdmin):
+    list_display = ('nama_progress', 'id_project', 'desc', 'status')
+
+class MaterialCustom(admin.ModelAdmin):
+    list_display = ('nama_material', 'id_kategori_material', 'harga')
+
+class KategoriMaterialCustom(admin.ModelAdmin):
+    list_display = ('nama_kategori')
+
+class StokGudangCustom(admin.ModelAdmin):
+    list_display = ('id_material', 'stok', 'last_stok')
+
+class StokInCustom(admin.ModelAdmin):
+    list_display = ('id_material', 'stok_in', 'katerangan')
+
+class StokOutCustom(admin.ModelAdmin):
+    list_display = ('id_material', 'id_project', 'stok_out', 'katerangan')
+
+
 
 admin.site.register(User, CustomUser)
-admin.site.register(Customer)
-admin.site.register(Project)
-admin.site.register(Cost_Project)
-admin.site.register(Progress_Project)
-admin.site.register(Material)
+admin.site.register(Customer, CustomerCustom)
+admin.site.register(Project, ProjectCustom)
+admin.site.register(Cost_Project, CostProjectCustom)
+admin.site.register(Progress_Project, ProgressProjectCustom)
+admin.site.register(Material, MaterialCustom)
 admin.site.register(Kategori_Material)
-admin.site.register(Stok_Gudang)
-admin.site.register(Stok_In)
-admin.site.register(Stok_Out)
+admin.site.register(Stok_Gudang, StokGudangCustom)
+admin.site.register(Stok_In, StokInCustom)
+admin.site.register(Stok_Out, StokOutCustom)
 admin.site.register(Modified_Stok)
 
 # Register your models here.

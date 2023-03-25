@@ -19,7 +19,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         refresh = self.get_token(self.user)
 
         data['name'] = "%s %s" % (self.user.first_name, self.user.last_name)
-        data['role'] = self.user.role
+        data['role'] = self.user.get_role_display()
         data['username'] = self.user.username
         data['id_user'] = self.user.id
 
