@@ -6,6 +6,10 @@ from rest_framework.views import APIView
 from ...etc import getuuid
 from ...etc.response_get import response
 import datetime
+from django.db.models import Count, Min
+import json
+from django.core.serializers import serialize
+from re import search
 
 
 class ProjectView(APIView):
@@ -124,3 +128,73 @@ class ProjectView(APIView):
                 return response(code=404, data=None, detail_message="data project not found")
         except Exception as e:
             return response(code=500, data=None, detail_message=str(e))
+        
+
+class ProjectCountView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request):
+        project = Project.objects.all()
+        count_pending = 0
+        count_progress = 0
+        count_done = 0
+        for p in list(project.values()):
+            if search("On Progress", p['status']):
+                count_progress += 1
+            elif p['status'] == "Pending":
+                count_pending += 1
+            elif p['status'] == "Projek Selesai":
+                count_done += 1
+        
+        self.data = {
+            "project_count": {
+                "count_pending": count_pending,
+                "count_progress": count_progress,
+                "count_done": count_done,
+                "count_all": len(list(project.values()))
+            }
+        }
+
+        return response(code=200, data=self.data, detail_message=None)
+    
+# class ProjectDeadlineView(APIView):
+#     permission_classes = (IsAuthenticated, )
+
+#     def get(self, request):
+#         project = Project.objects.all().values_list('id_project','nama_project', 'id_customer_id').annotate(Min('estimasi_pengerjaan')).order_by('estimasi_pengerjaan')
+
+#         print(list(project))
+
+class ProjectPrintView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request):
+        id = request.query_params.get('id')
+
+        # get project
+        try:
+            project = Project.objects.select_related('id_customer').get(id_project=id)
+
+            # get cost
+            cost_project = CostProjectSerializer(Cost_Project.objects.select_related('id_project').get(id_project_id=project.id), many=False)
+            # get stok out
+            stok_out = StokOutSerializer(Stok_Out.objects.filter(id_project_id=project.id).select_related('id_material', 'id_user', 'id_project', 'id_stok_gudang'), many=True)
+            # get pekerjaan lain
+            pekerjaan = PekerjaanLainSerializer(Pekerjaan_Lain.objects.filter(id_project_id=project.id), many=True)
+            # get progress
+            progress = ProgressProjectSerializer(Progress_Project.objects.filter(id_project_id=project.id), many=True)
+
+            project_2 = ProjectSerializer(project, many=False)
+
+            self.data = {
+                "project": project_2.data,
+                "cost_project": cost_project.data,
+                "stok_out": stok_out.data,
+                "pekerjaan_lain": pekerjaan.data,
+                "progress": progress.data
+            }
+
+            return response(code=200, data=self.data, detail_message=None)
+        
+        except Project.DoesNotExist:
+            return response(code=404, data=None, detail_message="data project not found")

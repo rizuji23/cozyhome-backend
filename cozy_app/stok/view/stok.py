@@ -6,6 +6,8 @@ from rest_framework.views import APIView
 from ...etc import getuuid
 from ...etc.response_get import response
 import datetime
+from django.db.models import Sum
+
 
 class StokAllView(APIView):
     permission_classes = (IsAuthenticated, )
@@ -24,7 +26,7 @@ class StokInView(APIView):
 
     def get(self, request):
         get_now = datetime.date.today()
-        stok_in = Stok_In.objects.filter(created_at__date=get_now)
+        stok_in = Stok_In.objects.all()
         serializer = StokInSerializer(stok_in, many=True)
         self.data = {
             "stok_in": serializer.data
@@ -156,7 +158,20 @@ class StokOutView(APIView):
             return response(code=404, data=None, detail_message="data project not found")
         
 
+class StokCountView(APIView):
+    permission_classes = (IsAuthenticated, )
 
-    
+    def get(self, request):
+        stok_gudang = Stok_Gudang.objects.aggregate(Sum('stok')).get('stok__sum')
+        stok_in = Stok_In.objects.aggregate(Sum('stok_in')).get('stok_in__sum')
+        stok_out = Stok_Out.objects.aggregate(Sum('stok_out')).get('stok_out__sum')
 
+        self.data = {
+            "count": {
+                "stok_gudang": stok_gudang,
+                "stok_in": stok_in,
+                "stok_out": stok_out
+            }
+        }
 
+        return response(code=200, data=self.data, detail_message=None)

@@ -19,13 +19,17 @@ urlpatterns = [
 
     urls("stok_out/", StokOutView.as_view(), name="get_stok_out"),
 
+    urls("stok_count/", StokCountView.as_view(), name="get_stok_count"),
+
     urls("customer/", CustomerView.as_view(), name="get_customer"),
 
     urls("project/", ProjectView.as_view(), name="get_project"),
-
+    urls("project_count/", ProjectCountView.as_view(), name="get_count_project"),
+    urls("project_print/", ProjectPrintView.as_view(), name="get_count_project"),
     urls("cost/", CostProjectView.as_view(), name="get_cost_project"),
 
     urls("progress/", ProgressProjectView.as_view(), name="get_progress_project"),
+    urls("progress_detail/", ProgressDetailView.as_view(), name="get_progress_detail"),
 
     urls("customer_detail/", CustomerDetailView.as_view(), name="get_detail_customer"),
 

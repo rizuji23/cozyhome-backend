@@ -6,6 +6,9 @@ from rest_framework.views import APIView
 from ...etc import getuuid
 from ...etc.response_get import response
 import datetime
+from itertools import groupby
+from operator import itemgetter
+import json
 
 class ProgressProjectView(APIView):
     permission_classes = (IsAuthenticated, )
@@ -102,3 +105,32 @@ class ProgressProjectView(APIView):
                 return response(code=404, data=None, detail_message="data progress not found")
         except Exception as e:
             return response(code=500, data=None, detail_message=str(e))
+
+
+class ProgressDetailView(APIView):
+    def get(self, request):
+        id = request.query_params.get('id')
+
+        try:
+            project = Project.objects.get(id_project=id)
+            _project = ProjectSerializer(project, many=False)
+            progress = Progress_Project.objects.filter(id_project_id=project.id).values('id_progress_project', 'nama_progress', 'desc', 'created_at', 'status', 'id_project_id').order_by('status')
+
+            rows = groupby(progress, itemgetter('status'))
+
+            data_progress = []
+            for key, group in rows:
+                key_and_group = {key : list(group)}
+                data_progress.append(key_and_group)
+            
+            print("data_progress", data_progress)
+
+            self.data = {
+                "project": _project.data,
+                "progress": data_progress
+            }
+
+            return response(code=200, data=self.data, detail_message=None)
+            
+        except Project.DoesNotExist:
+            return response(code=404, data=None, detail_message="data project not found")
