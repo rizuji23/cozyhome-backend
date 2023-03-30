@@ -18,7 +18,7 @@ class ProgressProjectView(APIView):
         try:
             project = Project.objects.get(id_project=id)
 
-            progress = ProgressProjectSerializer(Progress_Project.objects.filter(id_project_id=project.id), many=True)
+            progress = ProgressProjectSerializer(Progress_Project.objects.filter(id_project_id=project.id).order_by('-id'), many=True)
 
             self.data = {
                 "progress_project": progress.data

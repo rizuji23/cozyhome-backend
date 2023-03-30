@@ -14,7 +14,7 @@ class KategoriMaterialView(APIView):
         return Kategori_Material.objects.filter(id_kategori_material=id)
 
     def get(self, request):
-        kategori = KategoriMaterialSerializer(Kategori_Material.objects.all(), many=True)
+        kategori = KategoriMaterialSerializer(Kategori_Material.objects.all().order_by('-id'), many=True)
         self.data = {
             "kategori_material": kategori.data
         }

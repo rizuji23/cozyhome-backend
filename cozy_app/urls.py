@@ -11,7 +11,6 @@ urlpatterns = [
     urls('change_password/', ChangePasswordView.as_view(), name="change_password"),
 
     urls("kategori_material/", KategoriMaterialView.as_view(), name="get_kategori_material"),
-    urls("kategori_material/", KategoriMaterialView.as_view(), name="get_kategori_material"),
     urls("material/", MaterialView.as_view(), name="get_material"),
 
     urls('user/', UserView.as_view(), name='get_user'),

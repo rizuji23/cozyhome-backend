@@ -26,7 +26,7 @@ class StokInView(APIView):
 
     def get(self, request):
         get_now = datetime.date.today()
-        stok_in = Stok_In.objects.all()
+        stok_in = Stok_In.objects.all().order_by('-id')
         serializer = StokInSerializer(stok_in, many=True)
         self.data = {
             "stok_in": serializer.data
@@ -88,7 +88,7 @@ class StokOutView(APIView):
             try:
                 project = Project.objects.get(id_project=id_project)
 
-                with_id = StokOutSerializer(Stok_Out.objects.filter(id_project_id=project.id).select_related('id_material', 'id_user', 'id_project', 'id_stok_gudang'), many=True)
+                with_id = StokOutSerializer(Stok_Out.objects.filter(id_project_id=project.id).select_related('id_material', 'id_user', 'id_project', 'id_stok_gudang').order_by('-id'), many=True)
 
                 self.data = {
                     "stok_out": with_id.data
@@ -100,7 +100,7 @@ class StokOutView(APIView):
                 return response(code=404, data=None, detail_message="data project not found")
         
         else:
-            with_id = StokOutSerializer(Stok_Out.objects.all().select_related('id_material', 'id_user', 'id_project', 'id_stok_gudang'), many=True)
+            with_id = StokOutSerializer(Stok_Out.objects.all().select_related('id_material', 'id_user', 'id_project', 'id_stok_gudang').order_by('-id'), many=True)
             self.data = {
                 "stok_out": with_id.data
             }

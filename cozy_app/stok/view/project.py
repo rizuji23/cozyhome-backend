@@ -21,7 +21,7 @@ class ProjectView(APIView):
             try:
                 customer = Customer.objects.get(id_customer=id_customer)
                 project = ProjectSerializer(Project.objects.filter(id_customer_id=customer.id).
-                select_related('id_customer'), many=True)
+                select_related('id_customer').order_by('-id'), many=True)
                 self.data = {
                     "project": project.data
                 }
@@ -43,7 +43,7 @@ class ProjectView(APIView):
                 return response(code=404, data=None, detail_message="data projek not found")
         
         else:
-            project = ProjectSerializer(Project.objects.all().select_related('id_customer'), many=True)
+            project = ProjectSerializer(Project.objects.all().select_related('id_customer').order_by('-id'), many=True)
             self.data = {
                 "project": project.data
             }

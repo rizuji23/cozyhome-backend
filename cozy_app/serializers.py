@@ -26,13 +26,15 @@ class MaterialSerializer(serializers.ModelSerializer):
 class StokGudangSerializer(serializers.ModelSerializer):
     nama_material = serializers.CharField(source="id_material.nama_material", read_only=True)
 
+    harga_material = serializers.CharField(source="id_material.harga", read_only=True)
+
     id_material_2 = serializers.CharField(source="id_material.id_material", read_only=True)
 
     kategori_material = serializers.CharField(source="id_material.id_kategori_material.nama_kategori", read_only=True)
 
     class Meta(object):
         model = Stok_Gudang
-        fields = ('id_stok_gudang', 'id_material', 'id_material_2', 'nama_material', 'kategori_material', 'stok', 'last_stok', 'created_at', 'updated_at')
+        fields = ('id_stok_gudang', 'id_material', 'id_material_2', 'nama_material', 'harga_material', 'kategori_material', 'stok', 'last_stok', 'created_at', 'updated_at')
 
 class StokInSerializer(serializers.ModelSerializer):
     nama_material = serializers.CharField(source="id_material.nama_material", read_only=True)
@@ -48,7 +50,7 @@ class StokOutSerializer(serializers.ModelSerializer):
     kategori_material = serializers.CharField(source="id_material.id_kategori_material.nama_kategori", read_only=True)
     username = serializers.CharField(source="id_user.username", read_only=True)
 
-    nama_project = serializers.CharField(source="id_project.id_project.nama_project", read_only=True)
+    nama_project = serializers.CharField(source="id_project.nama_project", read_only=True)
 
     id_stok_gudang = serializers.CharField(source="id_stok_gudang.id_stok_gudang", read_only=True)
 

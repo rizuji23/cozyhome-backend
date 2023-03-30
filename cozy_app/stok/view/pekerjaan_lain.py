@@ -16,7 +16,7 @@ class PekerjaanLainView(APIView):
         try:
             project = Project.objects.get(id_project=id)
 
-            pekerjaan = PekerjaanLainSerializer(Pekerjaan_Lain.objects.filter(id_project_id=project.id), many=True)
+            pekerjaan = PekerjaanLainSerializer(Pekerjaan_Lain.objects.filter(id_project_id=project.id).order_by('-id'), many=True)
 
             self.data = {
                 "pekerjaan_lain": pekerjaan.data

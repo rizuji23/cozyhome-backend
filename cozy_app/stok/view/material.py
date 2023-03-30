@@ -18,7 +18,7 @@ class MaterialView(APIView):
             }
             return response(code=200, data=self.data, detail_message=None) 
         else:
-            materials = Material.objects.all().select_related('id_kategori_material')
+            materials = Material.objects.all().select_related('id_kategori_material').order_by('-id')
             seriliazer = MaterialSerializer(materials, many=True)
             self.data = {
                 "material": seriliazer.data
@@ -32,11 +32,15 @@ class MaterialView(APIView):
         kategori_material = request.data['kategori_material']
 
         try:
-            material_save = Material(id_material=id_material, nama_material=nama_material, harga=harga, id_kategori_material_id=kategori_material)
-            material_save.save()
-            return response(code=201, data=None, detail_message="created request success")
-        except Exception as e:
-            return response(code=500, data=None, detail_message=str(e))
+            kategori_ma = Kategori_Material.objects.get(id_kategori_material=kategori_material)
+            try:
+                material_save = Material(id_material=id_material, nama_material=nama_material, harga=harga, id_kategori_material_id=kategori_ma.id)
+                material_save.save()
+                return response(code=201, data=None, detail_message="created request success")
+            except Exception as e:
+                return response(code=500, data=None, detail_message=str(e))
+        except Kategori_Material.DoesNotExist:
+            return response(code=404, data=None, detail_message="data kategori material not found")
             
 
     def put(self, request):

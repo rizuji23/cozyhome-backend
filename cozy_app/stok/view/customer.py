@@ -11,7 +11,7 @@ class CustomerView(APIView):
     permission_classes = (IsAuthenticated, )
 
     def get(self, request):
-        customer = CustomerSerializer(Customer.objects.all(), many=True)
+        customer = CustomerSerializer(Customer.objects.all().order_by('-id'), many=True)
 
         self.data = {
             "customer": customer.data
