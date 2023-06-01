@@ -35,7 +35,16 @@ class MaterialView(APIView):
             kategori_ma = Kategori_Material.objects.get(id_kategori_material=kategori_material)
             try:
                 material_save = Material(id_material=id_material, nama_material=nama_material, harga=harga, id_kategori_material_id=kategori_ma.id)
+
                 material_save.save()
+
+                # save to stok_gudang
+                get_material = Material.objects.get(id_material=id_material)
+                id_stok_gudang = getuuid.Ramdom_Id.get_id()
+                stok_gudang = Stok_Gudang(id_stok_gudang=id_stok_gudang, id_material_id=get_material.id, stok=0, last_stok=0)
+
+                stok_gudang.save()
+
                 return response(code=201, data=None, detail_message="created request success")
             except Exception as e:
                 return response(code=500, data=None, detail_message=str(e))

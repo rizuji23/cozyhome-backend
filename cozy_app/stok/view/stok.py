@@ -43,6 +43,7 @@ class StokInView(APIView):
         
         try:
             material = Material.objects.get(id_material=id_material)
+            id_modified_stok = getuuid.Ramdom_Id.get_id()
             try:
                 stok_gudang = Stok_Gudang.objects.get(id_material_id=material.id)
                 calculate = stok_gudang.stok + stok_in
@@ -50,6 +51,8 @@ class StokInView(APIView):
                 stok_gudang.stok = calculate
 
                 try:
+                    modified_stok = Modified_Stok(id_modified_stok=id_modified_stok, id_stok_gudang_id=stok_gudang.id, id_material_id=material.id, stok=stok_gudang.stok + stok_in, last_stok=stok_gudang.stok, stok_in=stok_in, stok_out=None, keterangan="Stok Masuk", id_user_id=id_user)
+                    modified_stok.save()
                     stok_gudang.save()
                     _stok_in = Stok_In(id_stok_in=id_stok_in, id_stok_gudang_id=stok_gudang.id, id_material_id=material.id, stok_in=stok_in, katerangan=keterangan, id_user_id=id_user)
 
@@ -65,6 +68,11 @@ class StokInView(APIView):
                 try:
                     stok_gudang = Stok_Gudang(id_stok_gudang=id_stok_gudang, id_material_id=material.id, stok=stok_in, last_stok=0)
                     stok_gudang.save()
+
+                    get_stok = Stok_Gudang.objects.get(id_stok_gudang=id_stok_gudang)
+
+                    modified_stok = Modified_Stok(id_modified_stok=id_modified_stok, id_stok_gudang_id=get_stok.id, id_material_id=material.id, stok=stok_in, last_stok=0, stok_in=stok_in, stok_out=None, keterangan="Stok Masuk", id_user_id=id_user)
+                    modified_stok.save()
 
                     get_gudang = Stok_Gudang.objects.get(id_stok_gudang=id_stok_gudang)
 
@@ -110,6 +118,7 @@ class StokOutView(APIView):
 
     def post(self, request):
         id_stok_out = getuuid.Ramdom_Id.get_id()
+        id_modified_stok = getuuid.Ramdom_Id.get_id()
         id_stok_gudang = request.data['id_stok_gudang']
         id_material = request.data['id_material']
         id_project = request.data['id_project']
@@ -127,11 +136,16 @@ class StokOutView(APIView):
                     sum_out = int(stok_gudang.stok) - int(stok_out)
 
                     try:
+                        modified_stok = Modified_Stok(id_modified_stok=id_modified_stok, id_stok_gudang_id=stok_gudang.id, id_material_id=material.id, stok=sum_out, last_stok=stok_gudang.stok, stok_in=None, stok_out=stok_out, keterangan="Stok Keluar", id_user_id=id_user)
+                        modified_stok.save()
+
                         stok_gudang.last_stok = stok_gudang.stok
                         stok_gudang.stok = sum_out
                         stok_gudang.save()
 
                         _stok_out = Stok_Out(id_stok_out=id_stok_out, id_stok_gudang_id=stok_gudang.id, id_material_id=material.id, id_project_id=project.id, stok_out=stok_out, katerangan=keterangan, id_user_id=id_user)
+
+                        
 
                         _stok_out.save()
                         total_bahan = int(material.harga) * int(stok_out)
@@ -158,6 +172,29 @@ class StokOutView(APIView):
             return response(code=404, data=None, detail_message="data project not found")
         
 
+class ModifiedStokView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request):
+        if 'sort' in request.query_params:
+            if request.query_params.get('sort') != 'all':
+                modified = Modified_Stok.objects.filter(keterangan=request.query_params.get('sort')).select_related('id_material')
+                serializers = ModifiedStokSerializer(modified, many=True)
+                self.data = {
+                    "modified_stok": serializers.data
+                }
+
+                return response(code=200, data=self.data, detail_message=None)
+            else:
+                modified = Modified_Stok.objects.all().select_related('id_material')
+                serializers = ModifiedStokSerializer(modified, many=True)
+                self.data = {
+                    "modified_stok": serializers.data
+                }
+
+                return response(code=200, data=self.data, detail_message=None)  
+            
+
 class StokCountView(APIView):
     permission_classes = (IsAuthenticated, )
 
@@ -175,3 +212,48 @@ class StokCountView(APIView):
         }
 
         return response(code=200, data=self.data, detail_message=None)
+    
+class StokCountSumView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request):
+        stok_gudang = Stok_Gudang.objects.all().select_related('id_material')
+        stok_in = Stok_In.objects.all().select_related('id_material')
+        stok_out = Stok_Out.objects.all().select_related('id_material')
+
+        sum_total_asset = 0
+        sum_stok_all = 0
+
+        sum_stok_in = 0
+        sum_stok_out = 0
+        sum_asset_in = 0
+        sum_asset_out = 0
+
+        for i in stok_gudang:
+            sum_total_asset += i.id_material.harga * i.stok
+            sum_stok_all += i.stok
+
+        for i in stok_in:
+            sum_stok_in += i.stok_in
+            sum_asset_in += i.id_material.harga * i.stok_in
+        
+        for i in stok_out:
+            sum_stok_out += i.stok_out
+            sum_asset_out += i.id_material.harga * i.stok_out
+
+        print("sum_total_asset", sum_total_asset)
+        print("sum_stok_all", sum_stok_all)
+
+        self.data = {
+            "sum": {
+                "sum_total_asset": sum_total_asset,
+                "sum_stok_all": sum_stok_all,
+                "sum_stok_in": sum_stok_in,
+                "sum_asset_in": sum_asset_in,
+                "sum_stok_out": sum_stok_out,
+                "sum_asset_out": sum_asset_out
+            }
+        }
+
+        return response(code=200, data=self.data, detail_message=None) 
+

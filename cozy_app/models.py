@@ -152,7 +152,11 @@ class Modified_Stok(models.Model):
     id_stok_gudang = models.ForeignKey(Stok_Gudang, on_delete=models.DO_NOTHING)
     id_material = models.ForeignKey(Material, on_delete=models.DO_NOTHING)
     stok = models.BigIntegerField()
+    last_stok = models.BigIntegerField(null=True)
+    stok_in = models.BigIntegerField(null=True)
+    stok_out = models.BigIntegerField(null=True)
     keterangan = models.CharField(max_length=50)
+    id_user = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

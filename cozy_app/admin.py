@@ -50,7 +50,8 @@ class StokInCustom(admin.ModelAdmin):
 class StokOutCustom(admin.ModelAdmin):
     list_display = ('id_material', 'id_project', 'stok_out', 'katerangan')
 
-
+class ModifiedStokCustom(admin.ModelAdmin):
+    list_display = ('id_material', 'id_stok_gudang', 'stok', 'stok_in', 'stok_out', 'last_stok', 'keterangan')
 
 admin.site.register(User, CustomUser)
 admin.site.register(Customer, CustomerCustom)
@@ -62,6 +63,6 @@ admin.site.register(Kategori_Material)
 admin.site.register(Stok_Gudang, StokGudangCustom)
 admin.site.register(Stok_In, StokInCustom)
 admin.site.register(Stok_Out, StokOutCustom)
-admin.site.register(Modified_Stok)
+admin.site.register(Modified_Stok, ModifiedStokCustom)
 
 # Register your models here.
