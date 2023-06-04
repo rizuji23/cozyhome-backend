@@ -111,3 +111,8 @@ class ProgressDetailSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = Progress_Project
         fields = ('id_progress_project', 'nama_progress', 'desc', 'created_at', 'status', 'id_project_id')
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    class Meta(object):
+        model = User_Detail
+        fields = ('id_user_detail', 'img', 'id_user_id', 'created_at', 'updated_at')

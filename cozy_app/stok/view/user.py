@@ -14,12 +14,15 @@ class UserView(APIView):
     def get(self, request):
         try:
             user = User.objects.get(username=request.query_params.get('username'))
+            print(user)
+            detail_info = UserDetailSerializer(User_Detail.objects.get(id_user_id=user.id), many=False)
+            serializer = UserSerializer(user, many=False)
+            self.data = {
+                "user": serializer.data,
+                "detail_user": detail_info.data
+            }
 
-            # self.data = {
-            #     "user": user.data
-            # }
-
-            return response(code=200, data=None, detail_message=None)
+            return response(code=200, data=self.data, detail_message=None)
         except User.DoesNotExist:
             return response(code=404, data=None, detail_message="data user not found")
 
