@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-h#1@i38lhqaz%x+q8(fo$+27l=$4$gugy=wrs+6_0a!fc8t0c$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['cozyhome.api.weworks.ink']
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
@@ -45,6 +45,8 @@ REST_FRAMEWORK = {
 
 CORS_ORIGIN_WHITELIST = (
 'http://localhost:3000',  # for localhost (REACT Default)
+'http://cozyhome.project.weworks.ink',
+'http://cozyhome.stok.weworks.ink'
 )
 
 # Application definition
@@ -102,8 +104,8 @@ DATABASES = {
       'default': {  
         'ENGINE': 'django.db.backends.mysql',  
         'NAME': 'cozyhome',  
-        'USER': 'uji',  
-        'PASSWORD': 'uji123',  
+        'USER': 'root',  
+        'PASSWORD': 'Cozyhome2324!@#',  
         'HOST': '127.0.0.1',  
         'PORT': '3306',  
         'OPTIONS': {  
