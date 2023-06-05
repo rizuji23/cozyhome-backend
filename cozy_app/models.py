@@ -75,6 +75,7 @@ class Progress_Project(models.Model):
     desc = models.TextField(null=True)
     percentage = models.IntegerField(null=True)
     status = models.CharField(max_length=100)
+    foto = models.ImageField(upload_to='progress/', default='')
     id_user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -187,3 +188,15 @@ class User_Detail(models.Model):
 
     def __str__(self):
         return self.id_user_detail
+    
+
+class Activity_User(models.Model):
+    id = models.AutoField(primary_key=True)
+    id_activity_user = models.CharField(max_length=100)
+    desc = models.TextField()
+    id_user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
+
+    def __str__(self):
+        return self.id_activity_user

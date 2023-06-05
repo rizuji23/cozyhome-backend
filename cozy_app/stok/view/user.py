@@ -15,12 +15,18 @@ class UserView(APIView):
         try:
             user = User.objects.get(username=request.query_params.get('username'))
             print(user)
-            detail_info = UserDetailSerializer(User_Detail.objects.get(id_user_id=user.id), many=False)
             serializer = UserSerializer(user, many=False)
-            self.data = {
-                "user": serializer.data,
-                "detail_user": detail_info.data
-            }
+            try:
+                detail_info = UserDetailSerializer(User_Detail.objects.get(id_user_id=user.id), many=False)
+                self.data = {
+                    "user": serializer.data,
+                    "detail_user": detail_info.data
+                }
+            except User_Detail.DoesNotExist:
+                self.data = {
+                    "user": serializer.data,
+                    "detail_user": {}
+                }
 
             return response(code=200, data=self.data, detail_message=None)
         except User.DoesNotExist:

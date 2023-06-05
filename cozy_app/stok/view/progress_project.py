@@ -37,12 +37,14 @@ class ProgressProjectView(APIView):
         percentage = request.data['percentage']
         status = request.data['status']
         id_user = request.data['id_user']
-        
+        foto = request.data.get('foto', None)
+        print("foto", foto)
+
         try:
             project = Project.objects.get(id_project=id_project)
 
             try:
-                _progress = Progress_Project(id_progress_project=id_progress_project, id_project_id=project.id, nama_progress=nama_progress, desc=desc, percentage=percentage, status=status, id_user_id=id_user)
+                _progress = Progress_Project(id_progress_project=id_progress_project, id_project_id=project.id, nama_progress=nama_progress, desc=desc, percentage=percentage, status=status, foto=foto, id_user_id=id_user)
                 
                 _progress.save()
 
