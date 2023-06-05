@@ -117,9 +117,11 @@ class CostProjectSumView(APIView):
         cost = Cost_Project.objects.aggregate(total_bahan=Sum('cost_bahan'), total_design=Sum('cost_design'), total_operasional=Sum('cost_operasional'), total_produksi=Sum('cost_produksi'), total_lain=Sum('cost_lain'))
 
         total_all = 0
-        for k, v in cost.items():
-            print(v)
-            total_all += v
+
+        if cost['total_bahan'] != None:
+            for k, v in cost.items():
+                print(v)
+                total_all += v
 
         cost['total_all'] = total_all
 

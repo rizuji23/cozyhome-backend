@@ -115,8 +115,53 @@ class KategoriMaterialView(APIView):
             return response(code=500, data=None, detail_message=str(e))
             
 
+class ChangeProfile(APIView):
+    permission_classes = (IsAuthenticated, )
 
-        
+    def post(self, request):
+        file_img = request.data.get('img', None)
+        first_name = request.data['first_name']
+        last_name = request.data['last_name']
+        email = request.data['email']
+        id_user = request.data['user']
 
-
+        user = User.objects.get(id=id_user)
+        try:
+            if file_img == None:
+                try:
+                    user.first_name = first_name
+                    user.last_name = last_name
+                    user.email = email
+                    user.save()
+                    return response(code=201, data=None, detail_message="update request success")
+                except Exception as e:
+                    return response(code=500, data=None, detail_message=str(e))
+            else:
+                try:
+                    user.first_name = first_name
+                    user.last_name = last_name
+                    user.email = email
+                    user.save()
+                    try:
+                        user_detail = User_Detail.objects.get(id_user_id=id_user)
+                        try:
+                            user_detail.img = file_img
+                            user_detail.save()
+                            return response(code=201, data=None, detail_message="update request success")
+                        except Exception as e:
+                            return response(code=500, data=None, detail_message=str(e))
+                    except User_Detail.DoesNotExist:
+                        try:
+                            id_user_detail = getuuid.Ramdom_Id.get_id()
+                            user_detail = User_Detail(id_user_detail=id_user_detail, img=file_img, id_user_id=id_user)
+                            user_detail.save()
+                            return response(code=201, data=None, detail_message="update request success")
+                        except Exception as e:
+                            return response(code=500, data=None, detail_message=str(e))
+                except Exception as e:
+                    return response(code=500, data=None, detail_message=str(e))
+                
+                    
+        except User.DoesNotExist:
+            return response(code=404, data=None, detail_message="user is not found")
 

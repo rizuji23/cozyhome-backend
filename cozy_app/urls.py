@@ -41,7 +41,8 @@ urlpatterns = [
 
     urls("pekerjaan_lain/", PekerjaanLainView.as_view(), name="pekerjaan_lain"),
     urls("modified/", ModifiedStokView.as_view(), name="modified_stok_get"),
-    urls("stok_sum/", StokCountSumView.as_view(), name="get_sum_stok")
+    urls("stok_sum/", StokCountSumView.as_view(), name="get_sum_stok"),
+    urls('update_info/', views.ChangeProfile.as_view(), name="update_info_user")
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
