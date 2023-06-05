@@ -124,10 +124,10 @@ class ChangeProfile(APIView):
         last_name = request.data['last_name']
         email = request.data['email']
         id_user = request.data['user']
-
+        print("file_img", file_img)
         user = User.objects.get(id=id_user)
         try:
-            if file_img == None:
+            if file_img == None or file_img == '' or file_img == 'undefined':
                 try:
                     user.first_name = first_name
                     user.last_name = last_name
