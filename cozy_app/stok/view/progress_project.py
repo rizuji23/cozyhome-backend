@@ -20,6 +20,7 @@ class ProgressProjectView(APIView):
 
             progress = ProgressProjectSerializer(Progress_Project.objects.filter(id_project_id=project.id).order_by('-id'), many=True)
 
+
             self.data = {
                 "progress_project": progress.data
             }
@@ -38,7 +39,6 @@ class ProgressProjectView(APIView):
         status = request.data['status']
         id_user = request.data['id_user']
         foto = request.data.get('foto', None)
-        print("foto", foto)
 
         try:
             project = Project.objects.get(id_project=id_project)
@@ -67,7 +67,8 @@ class ProgressProjectView(APIView):
         percentage = request.data['percentage']
         status = request.data['status']
         id_user = request.data['id_user']
-
+        foto = request.data.get('foto', None)
+        print("IN")
         try:
             project = Project.objects.get(id_project=id_project)
             
@@ -80,6 +81,10 @@ class ProgressProjectView(APIView):
                     data.percentage = percentage
                     data.status = status
                     data.id_user_id = id_user
+                    if foto == None or foto == "" or foto == 'undefined':
+                        print(foto)
+                    else:
+                        data.foto = foto
 
                     data.save()
 

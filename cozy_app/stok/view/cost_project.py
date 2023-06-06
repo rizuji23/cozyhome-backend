@@ -8,7 +8,8 @@ from ...etc.response_get import response
 import datetime
 import pandas as pd
 from django.db.models import Sum
- 
+from django.db.models import Q
+
 
 class CostProjectView(APIView):
     permission_classes = (IsAuthenticated, )
@@ -114,7 +115,7 @@ class CostProjectSumView(APIView):
     permission_classes = (IsAuthenticated, )
 
     def get(self, request):
-        cost = Cost_Project.objects.aggregate(total_bahan=Sum('cost_bahan'), total_design=Sum('cost_design'), total_operasional=Sum('cost_operasional'), total_produksi=Sum('cost_produksi'), total_lain=Sum('cost_lain'))
+        cost = Cost_Project.objects.filter(~Q(id_project_id=None)).aggregate(total_bahan=Sum('cost_bahan'), total_design=Sum('cost_design'), total_operasional=Sum('cost_operasional'), total_produksi=Sum('cost_produksi'), total_lain=Sum('cost_lain'))
 
         total_all = 0
 
