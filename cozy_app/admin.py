@@ -56,6 +56,9 @@ class ModifiedStokCustom(admin.ModelAdmin):
 class User_DetailCustom(admin.ModelAdmin):
     list_display = ('id_user_detail', 'img', 'id_user')
 
+class Pekerjaan_LainCustom(admin.ModelAdmin):
+    list_display = ('id_pekerjaan_lain', 'id_project', 'nama_pekerjaan', 'desc', 'harga', 'id_user', 'created_at', 'updated_at')
+
 admin.site.register(User, CustomUser)
 admin.site.register(Customer, CustomerCustom)
 admin.site.register(Project, ProjectCustom)
@@ -68,4 +71,5 @@ admin.site.register(Stok_In, StokInCustom)
 admin.site.register(Stok_Out, StokOutCustom)
 admin.site.register(Modified_Stok, ModifiedStokCustom)
 admin.site.register(User_Detail, User_DetailCustom)
+admin.site.register(Pekerjaan_Lain, Pekerjaan_LainCustom)
 # Register your models here.

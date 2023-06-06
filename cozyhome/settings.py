@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-h#1@i38lhqaz%x+q8(fo$+27l=$4$gugy=wrs+6_0a!fc8t0c$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['cozyhome.api.weworks.ink']
+ALLOWED_HOSTS = ['cozyhome.api.weworks.ink', 'localhost']
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
@@ -100,12 +100,26 @@ WSGI_APPLICATION = "cozyhome.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# DATABASES = {
+#       'default': {  
+#         'ENGINE': 'django.db.backends.mysql',  
+#         'NAME': 'cozyhome',  
+#         'USER': 'root',  
+#         'PASSWORD': 'Cozyhome2324!@#',  
+#         'HOST': '127.0.0.1',  
+#         'PORT': '3306',  
+#         'OPTIONS': {  
+#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"  
+#         }  
+#     }  
+# }
+
 DATABASES = {
       'default': {  
         'ENGINE': 'django.db.backends.mysql',  
         'NAME': 'cozyhome',  
-        'USER': 'root',  
-        'PASSWORD': 'Cozyhome2324!@#',  
+        'USER': 'uji',  
+        'PASSWORD': 'uji123',  
         'HOST': '127.0.0.1',  
         'PORT': '3306',  
         'OPTIONS': {  

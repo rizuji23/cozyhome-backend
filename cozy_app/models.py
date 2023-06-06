@@ -34,7 +34,7 @@ class Customer(models.Model):
 class Project(models.Model):
     id = models.AutoField(primary_key=True)
     id_project = models.CharField(max_length=100)
-    id_customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
+    id_customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True)
     nama_project = models.CharField(max_length=100)
     jumlah_volumn = models.CharField(max_length=100)
     estimasi_pengerjaan = models.CharField(max_length=100)
@@ -54,7 +54,7 @@ class Project(models.Model):
 class Cost_Project(models.Model):
     id = models.AutoField(primary_key=True)
     id_cost_project = models.CharField(max_length=100)
-    id_project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    id_project = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True)
     cost_design = models.BigIntegerField(null=True)
     cost_operasional = models.BigIntegerField(null=True)
     cost_produksi = models.BigIntegerField(null=True)
@@ -70,7 +70,7 @@ class Cost_Project(models.Model):
 class Progress_Project(models.Model):
     id = models.AutoField(primary_key=True)
     id_progress_project = models.CharField(max_length=100)
-    id_project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    id_project = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True)
     nama_progress = models.CharField(max_length=100)
     desc = models.TextField(null=True)
     percentage = models.IntegerField(null=True)

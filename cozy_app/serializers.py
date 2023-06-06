@@ -97,7 +97,7 @@ class ProgressProjectSerializer(serializers.ModelSerializer):
 
     class Meta(object):
         model = Progress_Project
-        fields = ('id_progress_project', 'nama_project', 'nama_progress', 'desc', 'percentage', 'status', 'id_user', 'created_at', 'updated_at')
+        fields = ('id_progress_project', 'nama_project', 'nama_progress', 'desc', 'percentage', 'status', 'foto', 'id_user', 'created_at', 'updated_at')
 
 
 class PekerjaanLainSerializer(serializers.ModelSerializer):
