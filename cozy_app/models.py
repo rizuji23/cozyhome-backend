@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from simple_history.models import HistoricalRecords
 # Create your models here.
 
 class User(AbstractUser):
@@ -27,14 +28,16 @@ class Customer(models.Model):
     id_user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.nama_customer
 
+
 class Project(models.Model):
     id = models.AutoField(primary_key=True)
     id_project = models.CharField(max_length=100)
-    id_customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True)
+    id_customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True)
     nama_project = models.CharField(max_length=100)
     jumlah_volumn = models.CharField(max_length=100)
     estimasi_pengerjaan = models.CharField(max_length=100)
@@ -47,6 +50,7 @@ class Project(models.Model):
     id_user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.nama_project
@@ -63,6 +67,7 @@ class Cost_Project(models.Model):
     id_user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.id_project.nama_project
@@ -79,6 +84,7 @@ class Progress_Project(models.Model):
     id_user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
     def __str__(self):
        return self.nama_progress
@@ -89,6 +95,7 @@ class Kategori_Material(models.Model):
     nama_kategori = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
     def __str__(self):
        return self.nama_kategori
@@ -101,6 +108,7 @@ class Material(models.Model):
     harga = models.BigIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
     def __str__(self):
        return self.nama_material
@@ -108,26 +116,30 @@ class Material(models.Model):
 class Stok_Gudang(models.Model):
     id = models.AutoField(primary_key=True)
     id_stok_gudang = models.CharField(max_length=100)
-    id_material = models.ForeignKey(Material, on_delete=models.DO_NOTHING)
+    id_material = models.ForeignKey(Material, on_delete=models.CASCADE, null=True)
     stok = models.BigIntegerField()
     last_stok = models.BigIntegerField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
     def __str__(self):
        return self.id_material.nama_material
+    
+
 
 
 class Stok_In(models.Model):
     id = models.AutoField(primary_key=True)
     id_stok_in = models.CharField(max_length=100)
-    id_stok_gudang = models.ForeignKey(Stok_Gudang, on_delete=models.DO_NOTHING)
-    id_material = models.ForeignKey(Material, on_delete=models.DO_NOTHING)
+    id_stok_gudang = models.ForeignKey(Stok_Gudang, on_delete=models.CASCADE)
+    id_material = models.ForeignKey(Material, on_delete=models.CASCADE)
     stok_in = models.BigIntegerField()
     katerangan = models.TextField(null=True)
     id_user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
     def __str__(self):
        return self.id_material.nama_material
@@ -135,14 +147,15 @@ class Stok_In(models.Model):
 class Stok_Out(models.Model):
     id = models.AutoField(primary_key=True)
     id_stok_out = models.CharField(max_length=100)
-    id_stok_gudang = models.ForeignKey(Stok_Gudang, on_delete=models.DO_NOTHING)
-    id_material = models.ForeignKey(Material, on_delete=models.DO_NOTHING)
-    id_project = models.ForeignKey(Project, on_delete=models.DO_NOTHING)
+    id_stok_gudang = models.ForeignKey(Stok_Gudang, on_delete=models.CASCADE)
+    id_material = models.ForeignKey(Material, on_delete=models.CASCADE)
+    id_project = models.ForeignKey(Project, on_delete=models.CASCADE)
     stok_out = models.BigIntegerField()
     katerangan = models.TextField(null=True)
     id_user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
     def __str__(self):
        return self.id_material.nama_material
@@ -157,9 +170,11 @@ class Modified_Stok(models.Model):
     stok_in = models.BigIntegerField(null=True)
     stok_out = models.BigIntegerField(null=True)
     keterangan = models.CharField(max_length=50)
+    id_project = models.ForeignKey(Project, on_delete=models.DO_NOTHING, null=True)
     id_user = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
     def __str__(self):
        return self.id_material.nama_material
@@ -174,6 +189,7 @@ class Pekerjaan_Lain(models.Model):
     id_user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
     def __str__(self):
        return self.nama_pekerjaan

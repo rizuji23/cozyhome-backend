@@ -51,7 +51,7 @@ class StokOutCustom(admin.ModelAdmin):
     list_display = ('id_material', 'id_project', 'stok_out', 'katerangan')
 
 class ModifiedStokCustom(admin.ModelAdmin):
-    list_display = ('id_material', 'id_stok_gudang', 'stok', 'stok_in', 'stok_out', 'last_stok', 'keterangan')
+    list_display = ('id_material', 'id_stok_gudang', 'stok', 'stok_in', 'stok_out', 'last_stok', 'keterangan', 'id_project')
 
 class User_DetailCustom(admin.ModelAdmin):
     list_display = ('id_user_detail', 'img', 'id_user')

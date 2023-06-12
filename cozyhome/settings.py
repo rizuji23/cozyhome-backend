@@ -44,7 +44,8 @@ REST_FRAMEWORK = {
 }
 
 CORS_ORIGIN_WHITELIST = (
-'http://localhost:3000',  # for localhost (REACT Default)
+'http://localhost:3000',
+'http://localhost:3006',  # for localhost (REACT Default)
 'http://cozyhome.project.weworks.ink',
 'http://cozyhome.stok.weworks.ink'
 )
@@ -61,7 +62,8 @@ INSTALLED_APPS = [
     "cozy_app",
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
-    'corsheaders'
+    'corsheaders',
+    'simple_history'
 ]
 
 MIDDLEWARE = [
@@ -74,6 +76,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
      'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 ROOT_URLCONF = "cozyhome.urls"

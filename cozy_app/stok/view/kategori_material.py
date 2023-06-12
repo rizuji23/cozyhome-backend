@@ -14,10 +14,20 @@ class KategoriMaterialView(APIView):
         return Kategori_Material.objects.filter(id_kategori_material=id)
 
     def get(self, request):
-        kategori = KategoriMaterialSerializer(Kategori_Material.objects.all().order_by('-id'), many=True)
-        self.data = {
-            "kategori_material": kategori.data
-        }
+        if 'id_kategori' not in request.query_params:
+            kategori = KategoriMaterialSerializer(Kategori_Material.objects.all().order_by('-id'), many=True)
+            self.data = {
+                "kategori_material": kategori.data
+            }
+        else:
+            id = request.query_params.get('id_kategori')
+            kategoris = Kategori_Material.objects.get(id_kategori_material=id)
+            kategori = KategoriMaterialSerializer(kategoris, many=False)
+            get_include_material = MaterialSerializer(Material.objects.filter(id_kategori_material_id=kategoris.id), many=True)
+            self.data = {
+                "kategori_material": kategori.data,
+                "material": get_include_material.data
+            }
         return response(code=200, data=self.data, detail_message=None)
     
     def post(self, request):
