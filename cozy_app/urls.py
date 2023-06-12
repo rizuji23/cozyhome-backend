@@ -45,7 +45,8 @@ urlpatterns = [
     urls('update_info/', views.ChangeProfile.as_view(), name="update_info_user"),
     urls('analisis/', AnalisisProjectView.as_view(), name="analisis_project"),
     urls('stok_detail/', DetailStok.as_view(), name="stok_detail"),
-    urls('print/transaksi/', PrintTransaksi.as_view(), name="print_stok")
+    urls('print/transaksi/', PrintTransaksi.as_view(), name="print_stok"),
+    urls('print/all/', PrintAll.as_view(), name="print_stok")
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

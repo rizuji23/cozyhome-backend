@@ -100,3 +100,88 @@ class PrintTransaksi(APIView):
                return response(code=404, data=None, detail_message="data modified not found")
         except Stok_Gudang.DoesNotExist:
             return response(code=404, data=None, detail_message="data stok gudang not found")
+        
+
+class PrintAll(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request):
+        print("request", request.data)
+        filter_type = request.query_params.get('tipe_filter')
+
+        # get data
+        if filter_type == "Semua":
+            stok_gudang = Stok_Gudang.objects.all().select_related('id_material')
+            stok_in = Stok_In.objects.all().select_related('id_material')
+            stok_out = Stok_Out.objects.all().select_related('id_material')
+            modified = Modified_Stok.objects.all().select_related('id_material')
+        elif filter_type == "Tanggal":
+            start_date = request.query_params.get('start_date')
+            end_date = request.query_params.get('end_date')
+
+            stok_gudang = Stok_Gudang.objects.filter(created_at__gte=start_date, created_at__lte=end_date).select_related('id_material')
+            stok_in = Stok_In.objects.filter(created_at__gte=start_date, created_at__lte=end_date).select_related('id_material')
+            stok_out = Stok_Out.objects.filter(created_at__gte=start_date, created_at__lte=end_date).select_related('id_material')
+            modified = Modified_Stok.objects.filter(created_at__gte=start_date, created_at__lte=end_date).select_related('id_material')
+        
+        elif filter_type == "Bulan":
+            month = request.query_params.get('month')
+            year = request.query_params.get('year')
+
+            stok_gudang = Stok_Gudang.objects.filter(created_at__month=month, created_at__year=year).select_related('id_material')
+            stok_in = Stok_In.objects.filter(created_at__month=month, created_at__year=year).select_related('id_material')
+            stok_out = Stok_Out.objects.filter(created_at__month=month, created_at__year=year).select_related('id_material')
+            modified = Modified_Stok.objects.filter(created_at__month=month, created_at__year=year).select_related('id_material')
+
+        elif filter_type == "Tahun":
+            year = request.query_params.get('year')
+
+            stok_gudang = Stok_Gudang.objects.filter(created_at__year=year).select_related('id_material')
+            stok_in = Stok_In.objects.filter(created_at__year=year).select_related('id_material')
+            stok_out = Stok_Out.objects.filter(created_at__year=year).select_related('id_material')
+            modified = Modified_Stok.objects.filter(created_at__year=year).select_related('id_material')
+
+        serializer_gudang = StokGudangSerializer(stok_gudang, many=True)
+        serializer_in = StokInSerializer(stok_in, many=True)
+        serializer_out = StokOutSerializer(stok_out, many=True)
+        serializer_modified = ModifiedStokSerializer(modified, many=True)
+
+        # get sum data
+        sum_total_asset = 0
+        sum_stok_all = 0
+
+        sum_stok_in = 0
+        sum_stok_out = 0
+        sum_asset_in = 0
+        sum_asset_out = 0
+
+        for i in stok_gudang:
+            sum_total_asset += i.id_material.harga * i.stok
+            sum_stok_all += i.stok
+
+        for i in stok_in:
+            sum_stok_in += i.stok_in
+            sum_asset_in += i.id_material.harga * i.stok_in
+        
+        for i in stok_out:
+            sum_stok_out += i.stok_out
+            sum_asset_out += i.id_material.harga * i.stok_out
+        
+        self.data = {
+            "sum": {
+                "sum_total_asset": sum_total_asset,
+                "sum_stok_all": sum_stok_all,
+                "sum_stok_in": sum_stok_in,
+                "sum_asset_in": sum_asset_in,
+                "sum_stok_out": sum_stok_out,
+                "sum_asset_out": sum_asset_out
+            },
+            "data": {
+                "stok": serializer_gudang.data,
+                "in": serializer_in.data,
+                "out": serializer_out.data,
+                "modified": serializer_modified.data
+            }
+        }
+
+        return response(code=200, data=self.data, detail_message=None)
