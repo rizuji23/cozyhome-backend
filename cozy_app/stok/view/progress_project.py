@@ -121,7 +121,7 @@ class ProgressDetailView(APIView):
         try:
             project = Project.objects.get(id_project=id)
             _project = ProjectSerializer(project, many=False)
-            progress = Progress_Project.objects.filter(id_project_id=project.id).values('id_progress_project', 'nama_progress', 'desc', 'created_at', 'status', 'id_project_id').order_by('status')
+            progress = Progress_Project.objects.filter(id_project_id=project.id).values('id_progress_project', 'nama_progress', 'desc', 'created_at', 'status', 'id_project_id', 'foto').order_by('status')
 
             rows = groupby(progress, itemgetter('status'))
 
