@@ -66,3 +66,50 @@ class AnalisisProjectView(APIView):
         }
 
         return response(code=200, data=data, detail_message=None)
+
+
+class AnalisisStokView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request):
+        # stok in/out
+        modified = Modified_Stok.objects.all().select_related('id_material')
+        df_modified = pd.DataFrame(ModifiedStokSerializer(modified, many=True).data)
+        df_modified['stok_in'] = df_modified['stok_in'].fillna(0)
+        df_modified['stok_out'] = df_modified['stok_out'].fillna(0)
+
+        df_modified['created_at'] = pd.to_datetime(df_modified['created_at'])
+        df_modified['created_at_date'] = df_modified['created_at'].dt.strftime('%B %d, %Y')
+        df_total_modified = df_modified.groupby(['created_at_date'])['stok_in', 'stok_out'].sum()
+        print(df_total_modified.to_dict())
+
+        # perbandingan
+        stok_in = df_modified.loc[df_modified['keterangan'] == "Stok Masuk"]
+        stok_out = df_modified.loc[df_modified['keterangan'] == "Stok Keluar"]
+
+        print(stok_in['stok_in'].sum(), stok_out['stok_out'].sum())
+
+        # statistik keuangan
+        df_modified['created_at_month'] = df_modified['created_at'].dt.strftime('%B')
+        df_modified['harga'] = df_modified['harga'].astype("int64")
+        df_modified['total_harga_in'] = df_modified['stok_in'] * df_modified['harga']
+        df_modified['total_harga_out'] = df_modified['stok_out'] * df_modified['harga']
+        df_modified['total_harga_all'] = df_modified['total_harga_in'] + df_modified['total_harga_out']
+        df_keuangan = df_modified.groupby(['created_at_month']).agg(
+            stok_in = pd.NamedAgg(column='total_harga_in', aggfunc="sum"),
+            stok_out = pd.NamedAgg(column='total_harga_out', aggfunc="sum"),
+            total_all = pd.NamedAgg(column='total_harga_all', aggfunc="sum")
+        )
+        print("df_keuangan", df_keuangan.to_dict())
+        print(df_modified)
+
+        data = {
+            'stok': df_total_modified.to_dict(),
+            'perbandingan': {
+                'stok_in': stok_in['stok_in'].sum(),
+                'stok_out': stok_out['stok_out'].sum()
+            },
+            'keuangan': df_keuangan.to_dict(),
+        }
+
+        return response(code=200, data=data, detail_message=None)
