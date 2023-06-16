@@ -1,10 +1,16 @@
 asgiref==3.6.0
 Django==4.1.7
 django-cors-headers==3.14.0
+django-simple-history==3.3.0
 djangorestframework==3.14.0
 djangorestframework-simplejwt==5.2.2
 mysqlclient==2.1.1
+numpy==1.24.2
+pandas==1.5.3
+Pillow==9.5.0
 PyJWT==1.7.1
+python-dateutil==2.8.2
 pytz==2022.7.1
+six==1.16.0
 sqlparse==0.4.3
 tzdata==2022.7
