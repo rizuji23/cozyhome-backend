@@ -45,8 +45,8 @@ REST_FRAMEWORK = {
 
 CORS_ORIGIN_WHITELIST = (
 'http://localhost:3000',  # for localhost (REACT Default)
-'http://cozyhome.project.weworks.ink',
-'http://cozyhome.stok.weworks.ink'
+'https://cozyhome.project.weworks.ink',
+'https://cozyhome.stok.weworks.ink'
 )
 
 # Application definition
@@ -118,8 +118,8 @@ DATABASES = {
       'default': {  
         'ENGINE': 'django.db.backends.mysql',  
         'NAME': 'cozyhome',  
-        'USER': 'uji',  
-        'PASSWORD': 'uji123',  
+        'USER': 'root',  
+        'PASSWORD': 'Cozyhome2324!@#',  
         'HOST': '127.0.0.1',  
         'PORT': '3306',  
         'OPTIONS': {  
