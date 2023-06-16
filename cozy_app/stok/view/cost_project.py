@@ -21,8 +21,20 @@ class CostProjectView(APIView):
             try:
                 cost = CostProjectSerializer(Cost_Project.objects.select_related('id_project').get(id_project_id=project.id), many=False)
 
+                sum_asset_out = 0
+                stok_out_count = Stok_Out.objects.filter(id_project_id=project.id)
+
+                for i in stok_out_count:
+                    sum_asset_out += i.id_material.harga * i.stok_out
+                print("cost.data", cost.data)
                 self.data = {
-                    "cost_project": cost.data
+                    "cost_project": {
+                        "cost_produksi": cost.data['cost_produksi'],
+                        "cost_operasional": cost.data['cost_operasional'],
+                        "cost_lain": cost.data['cost_lain'],
+                        "cost_bahan": sum_asset_out,
+                        "id_cost_project": cost.data['id_cost_project']
+                    }
                 }
 
                 return response(code=200, data=self.data, detail_message=None)

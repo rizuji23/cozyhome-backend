@@ -59,15 +59,16 @@ class MaterialView(APIView):
         kategori_material = request.data['kategori_material']
         try:
             try:
+                kategori = Kategori_Material.objects.get(id_kategori_material=kategori_material)
                 data = Material.objects.get(id_material=id)
                 data.nama_material = nama_material
                 data.harga = harga
-                data.id_kategori_material_id = kategori_material
+                data.id_kategori_material_id = kategori.id
 
                 data.save()
                 return response(code=201, data=None, detail_message="update request success")
 
-            except Material.DoesNotExist:
+            except Material.DoesNotExist or Kategori_Material.DoesNotExist:
                 return response(code=404, data=None, detail_message="data material not found")
         except Exception as e:
             return response(code=500, data=None, detail_message=str(e))

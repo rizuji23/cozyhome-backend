@@ -136,16 +136,13 @@ class StokOutView(APIView):
                     sum_out = int(stok_gudang.stok) - int(stok_out)
 
                     try:
-                        modified_stok = Modified_Stok(id_modified_stok=id_modified_stok, id_stok_gudang_id=stok_gudang.id, id_material_id=material.id, stok=sum_out, last_stok=stok_gudang.stok, stok_in=None, stok_out=stok_out, keterangan="Stok Keluar", id_user_id=id_user)
-                        modified_stok.save()
-
+                        modified_stok = Modified_Stok(id_modified_stok=id_modified_stok, id_stok_gudang_id=stok_gudang.id, id_material_id=material.id, stok=sum_out, last_stok=sum_out, stok_in=None, stok_out=stok_out, keterangan="Stok Keluar", id_user_id=id_user, id_project_id=project.id)
                         stok_gudang.last_stok = stok_gudang.stok
                         stok_gudang.stok = sum_out
                         stok_gudang.save()
+                        modified_stok.save()
 
                         _stok_out = Stok_Out(id_stok_out=id_stok_out, id_stok_gudang_id=stok_gudang.id, id_material_id=material.id, id_project_id=project.id, stok_out=stok_out, katerangan=keterangan, id_user_id=id_user)
-
-                        
 
                         _stok_out.save()
                         total_bahan = int(material.harga) * int(stok_out)
@@ -257,3 +254,79 @@ class StokCountSumView(APIView):
 
         return response(code=200, data=self.data, detail_message=None) 
 
+class DetailStok(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request):
+        id = request.query_params.get('id')
+
+        # get data detail stok
+        try:
+            get_stok = Stok_Gudang.objects.get(id_stok_gudang=id)
+            # get data modified stok
+            print("DD", get_stok.id_material)
+            try:
+                get_material = Material.objects.get(id=get_stok.id_material_id)
+                get_modified = Modified_Stok.objects.filter(id_stok_gudang_id=get_stok.id)
+                
+                seriali_stok = StokGudangSerializer(get_stok, many=False)
+                seriali_modified = ModifiedStokSerializer(get_modified, many=True)
+                seriali_material = MaterialSerializer(get_material, many=False)
+
+                sum_asset_all = int(get_material.harga) * int(get_stok.stok)
+                sum_stok_in = 0
+                sum_stok_out = 0
+                sum_asset_in = 0
+                sum_asset_out = 0
+
+                get_stok_in = Stok_In.objects.filter(id_stok_gudang_id=get_stok.id)
+                get_stok_out = Stok_Out.objects.filter(id_stok_gudang_id=get_stok.id)
+
+                for i in get_stok_in:
+                    sum_stok_in += i.stok_in
+                    sum_asset_in += i.id_material.harga * i.stok_in
+                
+                for i in get_stok_out:
+                    sum_stok_out += i.stok_out
+                    sum_asset_out += i.id_material.harga * i.stok_out
+
+                self.data = {
+                    "stok_info": seriali_stok.data,
+                    "material": seriali_material.data,
+                    "modified": seriali_modified.data,
+                    "asset": {
+                        "all": sum_asset_all,
+                        "in": sum_asset_in,
+                        "out": sum_asset_out
+                    },
+                    "stok": {
+                        "in": sum_stok_in,
+                        "out": sum_stok_out
+                    }
+                }
+
+                return response(code=200, data=self.data, detail_message=None)
+            except Material.DoesNotExist:
+                return response(code=404, data=None, detail_message="data material not found")
+        except Stok_Gudang.DoesNotExist:
+            return response(code=404, data=None, detail_message="data stok gudang not found")
+        
+    def delete(self, request):
+        id = request.query_params.get('id')
+
+        try:
+            try:
+                data = Stok_Gudang.objects.get(id_stok_gudang=id)
+                data_in = Stok_In.objects.filter(id_stok_gudang_id=data.id)
+                data_out = Stok_Out.objects.filter(id_stok_gudang_id=data.id)
+                modified = Modified_Stok.objects.filter(id_stok_gudang_id=data.id)
+                data.stok = 0
+                data.save()
+                data_in.delete()
+                data_out.delete()
+                modified.delete()
+                return response(code=201, data=None, detail_message="delete request success")
+            except Stok_Gudang.DoesNotExist:
+                return response(code=404, data=None, detail_message="data stok gudang not found")
+        except Exception as e:
+            return response(code=500, data=None, detail_message=str(e))

@@ -22,6 +22,7 @@ class ProjectView(APIView):
                 customer = Customer.objects.get(id_customer=id_customer)
                 project = ProjectSerializer(Project.objects.filter(id_customer_id=customer.id).
                 select_related('id_customer').order_by('-id'), many=True)
+
                 self.data = {
                     "project": project.data
                 }
@@ -33,7 +34,25 @@ class ProjectView(APIView):
         elif 'id_project' in request.query_params:
             id_project = request.query_params.get('id_project')
             try:
-                project = ProjectSerializer(Project.objects.select_related('id_customer').get(id_project=id_project), many=False)
+                proje = Project.objects.select_related('id_customer').get(id_project=id_project)
+                project = ProjectSerializer(proje, many=False)
+
+                sum_asset_out = 0
+                stok_out_count = Stok_Out.objects.filter(id_project_id=proje.id)
+
+                for i in stok_out_count:
+                    sum_asset_out += i.id_material.harga * i.stok_out
+
+                cost_all = Cost_Project.objects.get(id_project_id=proje.id)
+                cost_all.cost_bahan = sum_asset_out
+                cost_all.save()
+                
+                cost_sum = cost_all.cost_produksi + cost_all.cost_bahan + cost_all.cost_design + cost_all.cost_operasional + cost_all.cost_lain
+
+                proje.total_cost = cost_sum
+
+                project.data['total_cost'] = cost_sum
+
                 self.data = {
                     "project": project.data
                 }
