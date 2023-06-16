@@ -44,16 +44,10 @@ REST_FRAMEWORK = {
 }
 
 CORS_ORIGIN_WHITELIST = (
-<<<<<<< HEAD
-'http://localhost:3000',  # for localhost (REACT Default)
-'https://cozyhome.project.weworks.ink',
-'https://cozyhome.stok.weworks.ink'
-=======
 'http://localhost:3000',
 'http://localhost:3006',  # for localhost (REACT Default)
 'http://cozyhome.project.weworks.ink',
 'http://cozyhome.stok.weworks.ink'
->>>>>>> 33f48e8c7c909d6da9665be18c144fea52adcf4f
 )
 
 # Application definition
