@@ -46,9 +46,13 @@ REST_FRAMEWORK = {
 CORS_ORIGIN_WHITELIST = (
 'http://localhost:3000',
 'http://localhost:3006',  # for localhost (REACT Default)
-'http://cozyhome.project.weworks.ink',
-'http://cozyhome.stok.weworks.ink'
+'https://cozyhome.project.weworks.ink',
+'https://cozyhome.stok.weworks.ink',
+'https://cozyhome.api.weworks.ink',
 )
+
+
+CSRF_TRUSTED_ORIGINS = ['https://cozyhome.api.weworks.ink','https://*.127.0.0.1']
 
 # Application definition
 
@@ -121,8 +125,8 @@ DATABASES = {
       'default': {  
         'ENGINE': 'django.db.backends.mysql',  
         'NAME': 'cozyhome',  
-        'USER': 'root',  
-        'PASSWORD': 'Cozyhome2324!@#',  
+        'USER': 'cozyhome',  
+        'PASSWORD': 'Qwerty123!@#',  
         'HOST': '127.0.0.1',  
         'PORT': '3306',  
         'OPTIONS': {  
@@ -170,8 +174,8 @@ AUTH_USER_MODEL = "cozy_app.User"
 
 STATIC_URL = "static/"
 MEDIA_URL = "media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+MEDIA_ROOT = '/var/www/cozyhome_backend/media'
+STATIC_ROOT = '/var/www/cozyhome_backend/static'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 

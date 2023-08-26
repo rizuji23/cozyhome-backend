@@ -42,16 +42,16 @@ class KategoriMaterialCustom(admin.ModelAdmin):
     list_display = ('nama_kategori')
 
 class StokGudangCustom(admin.ModelAdmin):
-    list_display = ('id_material', 'stok', 'last_stok')
+    list_display = ('id_material', 'stok', 'last_stok', 'created_at', 'updated_at')
 
 class StokInCustom(admin.ModelAdmin):
-    list_display = ('id_material', 'stok_in', 'katerangan')
+    list_display = ('id_material', 'stok_in', 'katerangan', 'created_at', 'updated_at')
 
 class StokOutCustom(admin.ModelAdmin):
-    list_display = ('id_material', 'id_project', 'stok_out', 'katerangan')
+    list_display = ('id_material', 'id_project', 'stok_out', 'katerangan', 'created_at', 'updated_at')
 
 class ModifiedStokCustom(admin.ModelAdmin):
-    list_display = ('id_material', 'id_stok_gudang', 'stok', 'stok_in', 'stok_out', 'last_stok', 'keterangan', 'id_project')
+    list_display = ('id_material', 'id_stok_gudang', 'stok', 'stok_in', 'stok_out', 'last_stok', 'keterangan', 'id_project', 'created_at', 'updated_at')
 
 class User_DetailCustom(admin.ModelAdmin):
     list_display = ('id_user_detail', 'img', 'id_user')
