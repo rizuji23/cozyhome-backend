@@ -50,7 +50,3 @@ class ChangePasswordView(APIView):
         else:
             return response(code=404, data=None, detail_message="old password is incorrect")
 
-
-
-
-

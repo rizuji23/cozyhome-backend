@@ -47,7 +47,15 @@ urlpatterns = [
     urls('analisis_stok_gudang/', AnalisisStokView.as_view(), name="stok_analisis"),
     urls('stok_detail/', DetailStok.as_view(), name="stok_detail"),
     urls('print/transaksi/', PrintTransaksi.as_view(), name="print_stok"),
-    urls('print/all/', PrintAll.as_view(), name="print_stok")
+    urls('print/all/', PrintAll.as_view(), name="print_stok"),
+
+    urls('nama_toko/', NamaToko.as_view(), name="NamaToko"),
+    urls('alat/', AlatView.as_view(), name="AlatView"),
+
+    urls('get_count_alats/', CountAlat.as_view(), name="CountAlat"),
+
+
+    
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

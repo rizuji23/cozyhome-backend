@@ -36,13 +36,15 @@ class StokInView(APIView):
     
     def post(self, request):
         id_stok_in = getuuid.Ramdom_Id.get_id()
+        id_toko_material = getuuid.Ramdom_Id.get_id()
         id_material = request.data['id_material']
         stok_in = request.data['stok_in']
         keterangan = request.data['keterangan']
         id_user = request.data['id_user']
+        nama_toko = request.data['nama_toko']
         
         try:
-            material = Material.objects.get(id_material=id_material)
+            material = Material.objects.get(id_material=id_material)    
             id_modified_stok = getuuid.Ramdom_Id.get_id()
             try:
                 stok_gudang = Stok_Gudang.objects.get(id_material_id=material.id)
@@ -57,6 +59,24 @@ class StokInView(APIView):
                     _stok_in = Stok_In(id_stok_in=id_stok_in, id_stok_gudang_id=stok_gudang.id, id_material_id=material.id, stok_in=stok_in, katerangan=keterangan, id_user_id=id_user)
 
                     _stok_in.save()
+
+                    get_stok_in = Stok_In.objects.get(id_stok_in=id_stok_in)
+                    get_modif = Modified_Stok.objects.get(id_modified_stok=id_modified_stok)
+
+                    try:
+                        toko_get = Toko_Material.objects.get(id_toko_material=nama_toko)
+
+                        get_modif.nama_toko = toko_get.nama_toko
+
+                        get_modif.save()
+
+                    except Toko_Material.DoesNotExist:
+                        toko = Toko_Material(id_toko_material=id_toko_material, id_stok_in_id=get_stok_in.id, nama_toko=nama_toko, keterangan=None)
+                        
+                        get_modif.nama_toko = nama_toko
+
+                        get_modif.save()
+                        toko.save()
 
                     return response(code=201, data=None, detail_message="created request success")
                 except Exception as e:
@@ -330,3 +350,34 @@ class DetailStok(APIView):
                 return response(code=404, data=None, detail_message="data stok gudang not found")
         except Exception as e:
             return response(code=500, data=None, detail_message=str(e))
+        
+class NamaToko(APIView):
+    permission_classes = (IsAuthenticated, )
+    
+    def get(self, request):
+        id_material = request.query_params.get('id', 'all')
+
+        if id_material != 'all':
+            try:
+                get_material = Material.objects.get(id_material=id_material)
+
+                toko = NamaTokoSerializer(Toko_Material.objects.filter(id_material_id=get_material.id), many=True)
+
+                self.data = {
+                    "toko": toko.data
+                }
+
+                return response(code=200, data=self.data, detail_message=None)
+            except Material.DoesNotExist:
+                return response(code=404, data=None, detail_message="data Material not found")
+        
+        else:
+            toko = NamaTokoSerializer(Toko_Material.objects.all(), many=True)
+
+            self.data = {
+                "toko": toko.data
+            }
+
+            return response(code=200, data=self.data, detail_message=None)
+
+        

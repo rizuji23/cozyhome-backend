@@ -52,7 +52,7 @@ CORS_ORIGIN_WHITELIST = (
 )
 
 
-CSRF_TRUSTED_ORIGINS = ['https://cozyhome.api.weworks.ink','https://*.127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://cozyhome.api.weworks.ink','https://*.127.0.0.1', 'http://localhost:3000']
 
 # Application definition
 
@@ -107,26 +107,12 @@ WSGI_APPLICATION = "cozyhome.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-# DATABASES = {
-#       'default': {  
-#         'ENGINE': 'django.db.backends.mysql',  
-#         'NAME': 'cozyhome',  
-#         'USER': 'root',  
-#         'PASSWORD': 'Cozyhome2324!@#',  
-#         'HOST': '127.0.0.1',  
-#         'PORT': '3306',  
-#         'OPTIONS': {  
-#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"  
-#         }  
-#     }  
-# }
-
 DATABASES = {
       'default': {  
         'ENGINE': 'django.db.backends.mysql',  
         'NAME': 'cozyhome',  
-        'USER': 'cozyhome',  
-        'PASSWORD': 'Qwerty123!@#',  
+        'USER': 'uji',  
+        'PASSWORD': 'uji123',  
         'HOST': '127.0.0.1',  
         'PORT': '3306',  
         'OPTIONS': {  
@@ -134,6 +120,20 @@ DATABASES = {
         }  
     }  
 }
+
+# DATABASES = {
+#       'default': {  
+#         'ENGINE': 'django.db.backends.mysql',  
+#         'NAME': 'cozyhome',  
+#         'USER': 'cozyhome',  
+#         'PASSWORD': 'Qwerty123!@#',  
+#         'HOST': '127.0.0.1',  
+#         'PORT': '3306',  
+#         'OPTIONS': {  
+#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"  
+#         }  
+#     }  
+# }
 
 
 # Password validation

@@ -125,9 +125,6 @@ class Stok_Gudang(models.Model):
 
     def __str__(self):
        return self.id_material.nama_material
-    
-
-
 
 class Stok_In(models.Model):
     id = models.AutoField(primary_key=True)
@@ -143,6 +140,19 @@ class Stok_In(models.Model):
 
     def __str__(self):
        return self.id_material.nama_material
+    
+class Toko_Material(models.Model):
+    id = models.AutoField(primary_key=True)
+    id_toko_material = models.CharField(max_length=100)
+    id_stok_in = models.ForeignKey(Stok_In, on_delete=models.CASCADE, null=True)
+    nama_toko = models.CharField(max_length=100)
+    keterangan = models.TextField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
+
+    def __str__(self):
+       return self.nama_toko
 
 class Stok_Out(models.Model):
     id = models.AutoField(primary_key=True)
@@ -171,6 +181,7 @@ class Modified_Stok(models.Model):
     stok_out = models.BigIntegerField(null=True)
     keterangan = models.CharField(max_length=50)
     id_project = models.ForeignKey(Project, on_delete=models.DO_NOTHING, null=True)
+    nama_toko = models.CharField(max_length=100, null=True)
     id_user = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -216,3 +227,16 @@ class Activity_User(models.Model):
 
     def __str__(self):
         return self.id_activity_user
+
+class Alat(models.Model):
+    id = models.AutoField(primary_key=True)
+    id_alat = models.CharField(max_length=100)
+    nama_alat = models.CharField(max_length=100)
+    harga_alat = models.CharField(max_length=100)
+    qty = models.IntegerField(max_length=100, null=True)
+    total_harga = models.CharField(max_length=100, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
+
+    def __str__(self):
+        return self.nama_alat

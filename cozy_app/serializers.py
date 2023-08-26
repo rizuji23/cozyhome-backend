@@ -57,7 +57,7 @@ class ModifiedStokSerializer(serializers.ModelSerializer):
 
     class Meta(object):
         model = Modified_Stok
-        fields = ('id_modified_stok', 'stok', 'last_stok', 'stok_in', 'stok_out', 'keterangan', 'id_user', 'created_at', 'updated_at', 'nama_material', 'kategori_material', 'project', 'harga')
+        fields = ('id_modified_stok', 'stok', 'last_stok', 'stok_in', 'stok_out', 'keterangan', 'id_user', 'created_at', 'updated_at', 'nama_material', 'kategori_material', 'project', 'nama_toko', 'harga')
 
 class StokOutSerializer(serializers.ModelSerializer):
     nama_material = serializers.CharField(source="id_material.nama_material", read_only=True)
@@ -121,3 +121,13 @@ class UserDetailSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = User_Detail
         fields = ('id_user_detail', 'img', 'id_user_id', 'created_at', 'updated_at')
+
+class NamaTokoSerializer(serializers.ModelSerializer):
+    class Meta(object):
+        model = Toko_Material
+        fields = ('id_toko_material', 'nama_toko', 'keterangan', 'created_at', 'updated_at')
+
+class AlatSerializer(serializers.ModelSerializer):
+    class Meta(object):
+        model = Alat
+        fields = ('id_alat', 'nama_alat', 'harga_alat', 'qty', 'total_harga', 'created_at', 'updated_at')
