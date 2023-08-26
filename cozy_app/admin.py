@@ -62,6 +62,9 @@ class Pekerjaan_LainCustom(admin.ModelAdmin):
 class NamaTokoCustom(admin.ModelAdmin):
     list_display = ('id_toko_material', 'nama_toko', 'created_at', 'updated_at')
 
+class AlatCustom(admin.ModelAdmin):
+    list_display = ('id_alat', 'nama_alat', 'harga_alat', 'qty', 'total_harga', 'created_at', 'updated_at')
+
 admin.site.register(User, CustomUser)
 admin.site.register(Customer, CustomerCustom)
 admin.site.register(Project, ProjectCustom)
