@@ -79,4 +79,6 @@ admin.site.register(Modified_Stok, ModifiedStokCustom)
 admin.site.register(User_Detail, User_DetailCustom)
 admin.site.register(Pekerjaan_Lain, Pekerjaan_LainCustom)
 admin.site.register(Toko_Material, NamaTokoCustom)
+admin.site.register(Alat, AlatCustom)
+
 # Register your models here.
