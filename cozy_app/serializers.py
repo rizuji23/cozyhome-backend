@@ -131,3 +131,39 @@ class AlatSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = Alat
         fields = ('id_alat', 'nama_alat', 'harga_alat', 'qty', 'total_harga', 'created_at', 'updated_at')
+
+class KategoriUnitSerializer(serializers.ModelSerializer):
+    class Meta(object):
+        model = Kategori_Unit
+        fields = ('id_kategori_unit', 'nama_kategori', 'created_at') 
+
+class RincianUnitSerializer(serializers.ModelSerializer):
+    kategori_unit = serializers.CharField(source="id_kategori_unit.nama_kategori", read_only=True)
+
+    project = serializers.CharField(source="id_project.nama_project", read_only=True)
+
+    id_project = serializers.CharField(source="id_project.id_project", read_only=True)
+
+    customer = serializers.CharField(source="id_project.id_customer.nama_customer", read_only=True)
+
+    id_kategori_unit = serializers.CharField(source="id_kategori_unit.id_kategori_unit", read_only=True)
+
+    class Meta(object):
+        model = Rincian_Unit
+        fields = ('id_rincian_unit', 'nama_unit', 'kategori_unit', 'dimensi', 'desc', 'project', 'customer', 'cost_produksi', 'cost_operasional', 'id_project', 'id_kategori_unit', 'created_at', 'updated_at')
+
+class KebutuhanMaterialSerializer(serializers.ModelSerializer):
+    class Meta(object):
+        model = Kebutuhan_Material_Unit
+        fields = ('id_kebutuhan_material_unit', 'nama_bahan', 'harga', 'qty', 'total', 'created_at', 'updated_at')
+
+class PekerjaanLainUnitSerializer(serializers.ModelSerializer):
+    class Meta(object):
+        model = Pekerjaan_Lain_Unit
+        fields = ('id_pekerjaan_lain_unit', 'judul_pekerjaan', 'harga', 'desc', 'created_at', 'updated_at')
+
+class ImageUnitSerializer(serializers.ModelSerializer):
+    class Meta(object):
+        model = Image_Unit
+        fields = ('id_image_unit', 'url_image', 'created_at', 'updated_at')
+

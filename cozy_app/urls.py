@@ -54,8 +54,15 @@ urlpatterns = [
 
     urls('get_count_alats/', CountAlat.as_view(), name="CountAlat"),
 
+    urls('unit_kategori/', KategoriUnit.as_view(), name="KategoriUnit"),
 
-    
+    urls('rincian_unit/', RincianUnit.as_view(), name="RincianUnit"),
+    urls('kebutuhan_unit/', KebutuhanMaterialUnit.as_view(), name="KebutuhanMaterialUnit"),
+
+    urls('pekerjaan_lain_unit/', PekerjaanLainUnit.as_view(), name="PekerjaanLainUnit"),
+    urls('image_unit/', ImageUnit.as_view(), name="ImageUnit"),
+
+
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
