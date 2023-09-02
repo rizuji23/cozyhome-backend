@@ -240,3 +240,66 @@ class Alat(models.Model):
 
     def __str__(self):
         return self.nama_alat
+
+class Kategori_Unit(models.Model):
+    id = models.AutoField(primary_key=True)
+    id_kategori_unit = models.CharField(max_length=100)
+    nama_kategori = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
+
+    def __str__(self):
+        return self.nama_kategori
+
+class Rincian_Unit(models.Model):
+    id = models.AutoField(primary_key=True)
+    id_rincian_unit = models.CharField(max_length=100)
+    nama_unit = models.CharField(max_length=100)
+    id_kategori_unit = models.ForeignKey(Kategori_Unit, on_delete=models.DO_NOTHING)
+    dimensi = models.CharField(max_length=100)
+    desc = models.TextField(null=True)
+    id_project = models.ForeignKey(Project, on_delete=models.DO_NOTHING)
+    cost_produksi = models.CharField(max_length=100, null=True, default='0')
+    cost_operasional = models.CharField(max_length=100, null=True, default='0')
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
+
+    def __str__(self):
+        return self.nama_unit
+    
+class Image_Unit(models.Model):
+    id = models.AutoField(primary_key=True)
+    id_image_unit = models.CharField(max_length=100)
+    id_rincian_unit = models.ForeignKey(Rincian_Unit, on_delete=models.CASCADE)
+    url_image = models.FileField(upload_to='image_unit/')
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
+
+class Kebutuhan_Material_Unit(models.Model):
+    id = models.AutoField(primary_key=True)
+    id_kebutuhan_material_unit = models.CharField(max_length=100)
+    id_rincian_unit = models.ForeignKey(Rincian_Unit, on_delete=models.CASCADE)
+    nama_bahan = models.CharField(max_length=100)
+    harga = models.CharField(max_length=100)
+    qty = models.IntegerField()
+    total = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
+
+    def __str__(self):
+        return self.nama_bahan
+    
+class Pekerjaan_Lain_Unit(models.Model):
+    id = models.AutoField(primary_key=True)
+    id_pekerjaan_lain_unit = models.CharField(max_length=100)
+    id_rincian_unit = models.ForeignKey(Rincian_Unit, on_delete=models.CASCADE)
+    judul_pekerjaan = models.CharField(max_length=100)
+    harga = models.CharField(max_length=100)
+    desc = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
+
+    def __str__(self):
+        return self.judul_pekerjaan
+
+

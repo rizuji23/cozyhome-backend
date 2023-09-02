@@ -9,3 +9,4 @@ from .view.user import *
 from .view.pekerjaan_lain import *
 from .view.analisis import *
 from .view.report import *
+from .view.rincian_unit import *
