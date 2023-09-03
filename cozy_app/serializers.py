@@ -150,7 +150,7 @@ class RincianUnitSerializer(serializers.ModelSerializer):
 
     class Meta(object):
         model = Rincian_Unit
-        fields = ('id_rincian_unit', 'nama_unit', 'kategori_unit', 'dimensi', 'desc', 'project', 'customer', 'cost_produksi', 'cost_operasional', 'id_project', 'id_kategori_unit', 'created_at', 'updated_at')
+        fields = ('id_rincian_unit', 'nama_unit', 'kategori_unit', 'dimensi', 'desc', 'project', 'customer', 'cost_produksi', 'cost_operasional', 'id_project', 'id_kategori_unit', 'cover', 'created_at', 'updated_at')
 
 class KebutuhanMaterialSerializer(serializers.ModelSerializer):
     class Meta(object):
@@ -163,7 +163,9 @@ class PekerjaanLainUnitSerializer(serializers.ModelSerializer):
         fields = ('id_pekerjaan_lain_unit', 'judul_pekerjaan', 'harga', 'desc', 'created_at', 'updated_at')
 
 class ImageUnitSerializer(serializers.ModelSerializer):
+    id_rincian_unit = serializers.CharField(source="id_rincian_unit.id_rincian_unit", read_only=True)
+
     class Meta(object):
         model = Image_Unit
-        fields = ('id_image_unit', 'url_image', 'created_at', 'updated_at')
+        fields = ('id_image_unit', 'url_image', 'id_rincian_unit', 'created_at', 'updated_at')
 

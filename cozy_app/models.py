@@ -261,6 +261,7 @@ class Rincian_Unit(models.Model):
     id_project = models.ForeignKey(Project, on_delete=models.DO_NOTHING)
     cost_produksi = models.CharField(max_length=100, null=True, default='0')
     cost_operasional = models.CharField(max_length=100, null=True, default='0')
+    cover = models.TextField(null=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 

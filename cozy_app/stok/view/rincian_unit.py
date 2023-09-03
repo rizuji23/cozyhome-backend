@@ -99,9 +99,12 @@ class RincianUnit(APIView):
         
         else:
             get_rincian = RincianUnitSerializer(Rincian_Unit.objects.all(), many=True)
+
+            get_image = ImageUnitSerializer(Image_Unit.objects.all(), many=True)
                 
             self.data = {
-                "rincian_unit": get_rincian.data
+                "rincian_unit": get_rincian.data,
+                "image": get_image.data
             }
 
             return response(code=200, data=self.data, detail_message=None)
@@ -422,6 +425,30 @@ class ImageUnit(APIView):
                 image.delete()
 
                 return response(code=201, data=None, detail_message="deleted request success")
+
+            except Rincian_Unit.DoesNotExist:
+                return response(code=404, data=None, detail_message="data rincian unit not found")
+        except Exception as e:
+                return response(code=500, data=None, detail_message=str(e))
+        
+class SetCoverImage(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def put(self, request):
+        id_rincian_unit = request.data['id_rincian_unit']
+        id_image_unit = request.data['id']
+
+        try:
+            try:
+                rincian = Rincian_Unit.objects.get(id_rincian_unit=id_rincian_unit)
+
+                get_image = Image_Unit.objects.get(id_image_unit=id_image_unit)
+
+                rincian.cover = get_image.url_image
+
+                rincian.save()
+
+                return response(code=201, data=None, detail_message="updated request success")
 
             except Rincian_Unit.DoesNotExist:
                 return response(code=404, data=None, detail_message="data rincian unit not found")

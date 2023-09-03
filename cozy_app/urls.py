@@ -61,6 +61,7 @@ urlpatterns = [
 
     urls('pekerjaan_lain_unit/', PekerjaanLainUnit.as_view(), name="PekerjaanLainUnit"),
     urls('image_unit/', ImageUnit.as_view(), name="ImageUnit"),
+    urls('set_cover/', SetCoverImage.as_view(), name="SetCoverImage"),
 
 
 ]
